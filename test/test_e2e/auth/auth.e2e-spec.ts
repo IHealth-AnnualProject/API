@@ -19,6 +19,7 @@ describe("Auth route", ()=>{
                 type: "mysql",
                 host: process.env.NEST_HOST,
                 username: process.env.TEST_USERNAME,
+                password:process.env.TEST_PASSWORD || '',
                 synchronize: true,
                 logging: false,
                 entities: ["src/**/*.entity.ts"],
