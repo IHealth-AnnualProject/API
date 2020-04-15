@@ -1,14 +1,14 @@
 pipeline {
   agent any
   stages {
-    stage('myStage'){
+    stage('Install'){
       steps {
-        sh 'ls -la'
+        sudo npm install
       }
     }
-    stage('Build') {
+    stage('Test') {
       steps {
-        sh 'ls'
+        npm run test
       }
     }
   }
