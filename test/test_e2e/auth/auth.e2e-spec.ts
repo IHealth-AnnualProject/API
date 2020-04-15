@@ -9,7 +9,6 @@ let app: INestApplication;
 let repository: Repository<UserEntity>;
 import 'dotenv/config';
 describe("Auth route", ()=>{
-
     beforeAll(async()=> {
     const module = await
     Test.createTestingModule({
@@ -53,6 +52,13 @@ describe("Auth route", ()=>{
             .post('/auth/register')
             .send({username:"pabla",password:"escobar"})
             .expect(201)
+    });
+
+    it('/ (POST) Login with argument should return 200', () => {
+        return request(app.getHttpServer())
+            .post('/auth/login')
+            .send({username:"pabla",password:"escobar"})
+            .expect(201);
     });
 
     afterAll(async () => {

@@ -1,4 +1,3 @@
-import {HttpException} from "@nestjs/common";
 import {UserService} from "../../../src/user/user.service";
 import {Repository} from "typeorm";
 import {UserEntity} from "../../../dist/user/user.entity";

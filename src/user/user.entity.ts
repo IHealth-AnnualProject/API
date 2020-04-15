@@ -31,8 +31,8 @@ export class UserEntity {
         return await bcrypt.compare(attempt, this.password);
     }
 
-    //add token?
-    toResponseObject(showToken: boolean = true): UserRO {
+    toResponseObject(): UserRO {
         return {id:this.id,created:this.created,username:this.username};
     }
+
     }
