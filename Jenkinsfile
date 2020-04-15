@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Install'){
       steps {
-        sudo npm install
+        npm install
       }
     }
     stage('Test') {
