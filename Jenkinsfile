@@ -8,7 +8,6 @@ pipeline {
     }
     stage('Test') {
       steps {
-        killall -9 middleman
         sh 'npm run test'
       }
     }
