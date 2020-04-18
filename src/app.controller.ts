@@ -13,4 +13,9 @@ export class AppController {
     getProfile(@Request() req) {
         return req.user;
     }
+
+    @Get('')
+    getHome(@Request() req) {
+        return 'Betsbi API'
+    }
 }
