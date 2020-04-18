@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Deploy') {
           steps {
-            sh 'killall -9 node'
+            sh 'killall -9 node' || true
             sh 'npm start &'
           }
         }
