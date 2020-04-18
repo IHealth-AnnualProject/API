@@ -16,7 +16,6 @@ pipeline {
     stage('Deploy') {
           steps {
             sh 'BUILD_ID=dontKillMe npm start &'
-            sh 'npm start &'
           }
         }
   }
