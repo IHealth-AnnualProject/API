@@ -12,7 +12,7 @@ pipeline {
         sh 'npm run test'
       }
     }
-    stage('Test') {
+    stage('Deploy') {
           steps {
             sh 'killall -9 node'
             sh 'npm start'
