@@ -15,7 +15,7 @@ pipeline {
     }
     stage('Deploy') {
           steps {
-            sh 'BUILD_ID=dontKillMe npm start &'
+            sh 'export BUILD_ID=dontKillMe npm start &'
           }
         }
   }
