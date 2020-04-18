@@ -15,7 +15,7 @@ pipeline {
     }
     stage('Deploy') {
           steps {
-            sh 'export BUILD_ID=dontKillMe npm start &'
+            sh 'JENKINS_NODE_COOKIE=dontKillMe npm start &'
           }
         }
   }
