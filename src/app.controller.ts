@@ -16,6 +16,6 @@ export class AppController {
 
     @Get('')
     getHome(@Request() req) {
-        return 'Betsbi API'
+        return 'Betsbi API '
     }
 }
