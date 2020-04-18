@@ -15,7 +15,8 @@ pipeline {
     }
     stage('Deploy') {
           steps {
-            BUILD_ID=dontKillMe nohup npm start &
+            BUILD_ID=dontKillMe npm start &
+            sh 'nohup npm start &'
           }
         }
   }
