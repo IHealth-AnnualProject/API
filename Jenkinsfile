@@ -3,6 +3,8 @@ pipeline {
   stages {
     stage('Install'){
       steps {
+       sh 'killall -9 node || true'
+       sleep(time:3,unit:"SECONDS")
        sh 'npm install'
       }
     }
@@ -13,7 +15,6 @@ pipeline {
     }
     stage('Deploy') {
           steps {
-            sh 'killall -9 node || true'
             sh 'npm start &'
           }
         }
