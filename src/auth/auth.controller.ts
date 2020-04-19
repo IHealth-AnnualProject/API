@@ -2,7 +2,9 @@ import {Body, Controller, Post, Get, HttpException, HttpStatus, UseGuards} from 
 
 import { AuthService } from './auth.service';
 import {UserService} from "../user/user.service";
-import {UserDTO} from "../user/user.dto";
+import {UserAndTokenResponse, UserDTO} from "../user/user.dto";
+import {ApiCreatedResponse} from "@nestjs/swagger";
+import {UserProfileDTO} from "../userProfile/userProfile.dto";
 
 @Controller('auth')
 export class AuthController {
@@ -11,6 +13,10 @@ export class AuthController {
         private authService: AuthService,
     ) {}
 
+    @ApiCreatedResponse({
+        description: 'Users login.',
+        type: UserAndTokenResponse,
+    })
     @Post('login')
     async login(@Body() userDTO: UserDTO) {
         const user = await this.userService.login(userDTO);
@@ -23,7 +29,6 @@ export class AuthController {
         if(userDTO.username===undefined || userDTO.password===undefined){
             throw new HttpException('Missing argument password or username', HttpStatus.BAD_REQUEST);
         }
-        const user = await this.userService.register(userDTO);
-        return { user}
+        await this.userService.register(userDTO);
     }
 }
