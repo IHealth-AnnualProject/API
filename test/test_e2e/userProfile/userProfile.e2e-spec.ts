@@ -10,7 +10,7 @@ let repository: Repository<UserProfileEntity>;
 import 'dotenv/config';
 import {UserProfileModule} from "../../../src/userProfile/userProfile.module";
 import {UserProfileEntity} from "../../../src/userProfile/userProfile.entity";
-
+jest.setTimeout(10000);
 let token;
 let id;
 describe("Auth route", ()=>{

@@ -13,6 +13,7 @@ export class UserProfileEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    //email retirer first_name last_name
     @Column('text')
     first_name: string;
 
@@ -24,7 +25,6 @@ export class UserProfileEntity {
 
     @OneToMany(type => MoralStatsEntity, moral => moral.patient)
     moral: MoralStatsEntity[];
-
 
     @OneToOne(type => UserEntity)
     @JoinColumn()
