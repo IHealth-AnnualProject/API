@@ -3,7 +3,7 @@ import {
     BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne,
     PrimaryGeneratedColumn
 } from "typeorm";
-import {MoralStatsEntity} from "../moral_stats/moral_stats.entity";
+import {MoralStatsEntity} from "../moral_stats/moralStats.entity";
 import {UserEntity} from "../user/user.entity";
 import {IsDefined} from "class-validator";
 import {UserProfileRO} from "./userProfile.dto";
@@ -23,7 +23,7 @@ export class UserProfileEntity {
     @Column('text')
     age: number;
 
-    @OneToMany(type => MoralStatsEntity, moral => moral.patient)
+    @OneToMany(type => MoralStatsEntity, moral => moral.userProfile)
     moral: MoralStatsEntity[];
 
     @OneToOne(type => UserEntity)

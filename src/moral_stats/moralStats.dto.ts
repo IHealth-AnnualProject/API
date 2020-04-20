@@ -3,13 +3,10 @@ import {Column, PrimaryGeneratedColumn} from "typeorm";
 
 
 export class MoralStatsDTO {
-    id: string;
-
-    created: string;
 
     value: number;
 
-    patient:string
+    user:string
 }
 
 export class MoralStatsRO{

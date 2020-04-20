@@ -10,11 +10,12 @@ import {UserEntity} from "../user/user.entity";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {AuthModule} from "../auth/auth.module";
 import {UserProfileEntity} from "./userProfile.entity";
+import {MoralStatsModule} from "../moral_stats/moralStats.module";
 
 
 @Module({
     imports: [TypeOrmModule.forFeature([UserProfileEntity]),AuthModule
-    ],
+    ,MoralStatsModule],
     providers: [UserProfileService],
     controllers:[UserProfileController],
     exports: [UserProfileService],

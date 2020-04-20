@@ -1,6 +1,7 @@
 import {IsNotEmpty, IsNotEmptyObject, IsString} from 'class-validator';
 import {Column, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
+import {MoralStatsDTO} from "../moral_stats/moralStats.dto";
 
 
 export class UserProfileDTO {
@@ -12,6 +13,8 @@ export class UserProfileDTO {
     age: number;
     @ApiPropertyOptional()
     geolocation:string;
+
+    moralStats:[MoralStatsDTO];
 
     user;
 }

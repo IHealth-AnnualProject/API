@@ -13,7 +13,7 @@ import {UserProfileEntity} from "../../../src/userProfile/userProfile.entity";
 jest.setTimeout(10000);
 let token;
 let id;
-describe("Auth route", ()=>{
+describe("UserProfile route", ()=>{
     beforeAll(async()=> {
         const module = await
             Test.createTestingModule({
@@ -40,7 +40,6 @@ describe("Auth route", ()=>{
         await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar"});
         let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
         token = result.body.token.access_token;
-        console.log(token);
     });
 
     it('/ (POST) Create userProfile without login should return 401', async () => {
@@ -79,14 +78,44 @@ describe("Auth route", ()=>{
             .expect([{ id:id,first_name: 'pablo', last_name: '', age: '', description: '' }]);
     });
 
-    it('/ (Get) Get userProfile with id should return 200', () => {
+    it('/ (Get) Get userProfile with id should return 200', async () => {
+        await request(app.getHttpServer())
+            .post('/userProfile/moral-stats')
+            .set('Authorization', 'Bearer ' + token).send({value:3});
+       await request(app.getHttpServer())
+                .post('/userProfile/moral-stats')
+                .set('Authorization', 'Bearer ' + token).send({value:2});
+         let res = await request(app.getHttpServer())
+            .get('/userProfile/'+id+'/moral-stats').set('Authorization', 'Bearer ' + token)
+            .expect(200);
+        expect(res.body.length).toBe(2);
+
+    });
+
+    //--- MORAL STATS ---
+    it('/ (POST) Create moral-stats without login should return 401', async () => {
         return request(app.getHttpServer())
-            .get('/userProfile/'+id).set('Authorization', 'Bearer ' + token)
-            .expect(200)
-            .expect({id:id, first_name: 'pablo', last_name: '', age: '', description: ''});
+            .post('/userProfile/moral-stats')
+            .expect(401)
+            .expect({message:"Unauthorized",statusCode: 401});
+    });
+
+    it('/ (POST) Create moral-stats without value should return 400', async () => {
+        return request(app.getHttpServer())
+            .post('/userProfile/moral-stats').set('Authorization', 'Bearer ' + token)
+            .expect(400)
+            .expect({message:'Error in request did you send a good value? ',statusCode: 400});
+    });
+
+    it('/ (POST) Create moral-stats  with value should return 200', async () => {
+        return request(app.getHttpServer())
+            .post('/userProfile/moral-stats')
+            .set('Authorization', 'Bearer ' + token).send({value:1})
+            .expect(201)
     });
 
     afterAll(async () => {
+        await repository.query('DELETE FROM moral_stats;');
         await repository.query('DELETE FROM user_profile;');
         await repository.query('DELETE FROM user;');
         await app.close();

@@ -3,10 +3,10 @@ import {
     HttpCode, Param
 } from "@nestjs/common";
 import {UserProfileDTO, UserProfileRO} from "./userProfile.dto";
-import {UserProfileService} from "./userProfile.service";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
 import {ApiTags, ApiCreatedResponse} from "@nestjs/swagger";
+import {UserProfileService} from "./userProfile.service";
 
 
 @ApiTags('userProfile')
@@ -48,6 +48,23 @@ export class UserProfileController {
     {
         patientDto.user = user.userId;
         return await this.userProfileService.update(patientDto);
+    }
+
+
+
+    @UseGuards(JwtAuthGuard)
+    @Post('moral-stats')
+    async addMoralStat(@User() user,@Body('value') value:number){
+        //TODO restrictions par jour
+        return await this.userProfileService.addMoralStat(user.userId,value);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get(':userId/moral-stats')
+    async getMoralStats(@Param() param)
+    {
+        //TODO sécuriser si les utilisateurs ne sont pas lié / amis
+        return await this.userProfileService.getMoralStats(param.userId)
     }
 
 }

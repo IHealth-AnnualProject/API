@@ -13,7 +13,7 @@ export class MoralStatsEntity {
     @Column('int')
     value: number;
 
-    @ManyToOne(type => UserProfileEntity, patient => patient.id)
-    patient: UserProfileEntity;
+    @ManyToOne(type => UserProfileEntity, userProfile => userProfile.id)
+    userProfile: UserProfileEntity;
 
 }
