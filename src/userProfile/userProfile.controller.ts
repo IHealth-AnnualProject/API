@@ -5,8 +5,9 @@ import {
 import {UserProfileDTO, UserProfileRO} from "./userProfile.dto";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
-import {ApiTags, ApiCreatedResponse} from "@nestjs/swagger";
+import {ApiTags, ApiCreatedResponse, ApiBody} from "@nestjs/swagger";
 import {UserProfileService} from "./userProfile.service";
+import {ApiImplicitBody} from "@nestjs/swagger/dist/decorators/api-implicit-body.decorator";
 
 
 @ApiTags('userProfile')
@@ -50,8 +51,6 @@ export class UserProfileController {
         return await this.userProfileService.update(patientDto);
     }
 
-
-
     @UseGuards(JwtAuthGuard)
     @Post('moral-stats')
     async addMoralStat(@User() user,@Body('value') value:number){
@@ -66,5 +65,4 @@ export class UserProfileController {
         //TODO sécuriser si les utilisateurs ne sont pas lié / amis
         return await this.userProfileService.getMoralStats(param.userId)
     }
-
 }
