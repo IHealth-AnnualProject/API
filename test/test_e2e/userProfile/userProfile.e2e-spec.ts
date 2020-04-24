@@ -1,4 +1,4 @@
-import {INestApplication} from "@nestjs/common";
+import {INestApplication, ValidationPipe} from "@nestjs/common";
 import {Test} from "@nestjs/testing";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import * as request from 'supertest';
@@ -34,10 +34,11 @@ describe("UserProfile route", ()=>{
                 ],
             }).compile();
         app = module.createNestApplication();
+        app.useGlobalPipes(new ValidationPipe());
 
         await app.init();
         repository = module.get('UserProfileEntityRepository');
-        await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar"});
+        await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar" ,isPsy:false});
         let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
         token = result.body.token.access_token;
     });
@@ -112,6 +113,16 @@ describe("UserProfile route", ()=>{
             .post('/userProfile/moral-stats')
             .set('Authorization', 'Bearer ' + token).send({value:1})
             .expect(201)
+    });
+
+
+    it('/ (Get) Should not create a user with a psy', async () => {
+        await request(app.getHttpServer()).post('/auth/register').send({username:"user",password:"escobar",isPsy:true});
+        let login = await request(app.getHttpServer()).post('/auth/login').send({username:"user",password:"escobar"});
+        let tokenUser = login.body.token.access_token;
+        return request(app.getHttpServer())
+            .post('/userProfile').set('Authorization', 'Bearer ' + tokenUser)
+            .expect(401).expect({message:"You cant create userProfile as a psy",statusCode:401});
     });
 
     afterAll(async () => {

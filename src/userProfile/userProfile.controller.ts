@@ -17,14 +17,16 @@ export class UserProfileController {
         private userProfileService: UserProfileService,
     ) {}
 
-
+    //You cant create userProfile as a psy
     @UseGuards(JwtAuthGuard)
     @Post('')
     async create(@User() user,@Body() patientDto:UserProfileDTO)
     {
-        patientDto.user = user.userId;
-        return await this.userProfileService.create(patientDto);
-    }
+        if(!user.isPsy) {
+            patientDto.user = user.userId;
+            return await this.userProfileService.create(patientDto);
+        }
+        throw new HttpException('You cant create userProfile as a psy', HttpStatus.UNAUTHORIZED);    }
 
     @UseGuards(JwtAuthGuard)
     @Get('')

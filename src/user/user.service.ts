@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { UserEntity } from './user.entity';
 import { UserDTO } from './user.dto';
+import {UserLogin} from "../auth/auth.validation";
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,7 @@ export class UserService {
         private userRepository: Repository<UserEntity>,
     ) {}
 
-    async login(data: UserDTO) {
+    async login(data: UserLogin) {
         const { username, password } = data;
         const user = await this.userRepository.findOne({ where: { username } });
         if (!user || !(await user.comparePassword(password))) {

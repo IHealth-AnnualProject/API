@@ -1,4 +1,4 @@
-import {INestApplication} from "@nestjs/common";
+import {INestApplication, ValidationPipe} from "@nestjs/common";
 import {Test} from "@nestjs/testing";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import * as request from 'supertest';
@@ -29,9 +29,9 @@ describe("Auth route", ()=>{
         ],
     }).compile();
     app = module.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
 
-    await
-    app.init();
+    await app.init();
     repository = module.get('UserEntityRepository');
     });
 
@@ -39,26 +39,48 @@ describe("Auth route", ()=>{
         return request(app.getHttpServer())
             .post('/auth/login')
             .expect(400)
-            .expect({message:"Invalid username/password",statusCode: 400});
+            .expect({
+                statusCode: 400,
+                message: [
+                    'username should not be empty',
+                    'password should not be empty',
+                ],
+                error: 'Bad Request'
+            });
     });
 
     it('/ (POST) Register with no argument should return 400', () => {
         return request(app.getHttpServer())
             .post('/auth/register') .expect(400)
-            .expect({message:"Missing argument password or username",statusCode: 400});
+            .expect({
+                statusCode: 400,
+                message: [
+                    'username should not be empty',
+                    'password should not be empty',
+                    'isPsy should not be empty'
+                ],
+                error: 'Bad Request'
+            });
+    });
+
+    it('/ (POST) Register without is psy argument should return 400', () => {
+        return request(app.getHttpServer())
+            .post('/auth/register')
+            .send({username:"pablota",password:"escobar"})
+            .expect(400)
     });
 
     it('/ (POST) Register with argument should return 200', () => {
         return request(app.getHttpServer())
             .post('/auth/register')
-            .send({username:"pabla",password:"escobar"})
+            .send({username:"pablota",password:"escobar",isPsy:true})
             .expect(201)
     });
 
     it('/ (POST) Login with argument should return 200', () => {
         return request(app.getHttpServer())
             .post('/auth/login')
-            .send({username:"pabla",password:"escobar"})
+            .send({username:"pablota",password:"escobar"})
             .expect(201);
     });
 

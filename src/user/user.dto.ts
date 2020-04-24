@@ -11,6 +11,10 @@ export class UserDTO {
     @ApiProperty()
     @IsNotEmpty()
     password: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    isPsy:boolean;
 }
 
 export class UserRO {
@@ -20,6 +24,8 @@ export class UserRO {
     username: string;
     @ApiProperty()
     created: Date;
+    @ApiProperty()
+    isPsy:boolean;
 }
 
 export class Token {

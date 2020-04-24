@@ -5,6 +5,7 @@ import {UserService} from "../user/user.service";
 import {UserAndTokenResponse, UserDTO} from "../user/user.dto";
 import {ApiCreatedResponse} from "@nestjs/swagger";
 import {UserProfileDTO} from "../userProfile/userProfile.dto";
+import {UserLogin} from "./auth.validation";
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +19,7 @@ export class AuthController {
         type: UserAndTokenResponse,
     })
     @Post('login')
-    async login(@Body() userDTO: UserDTO) {
+    async login(@Body() userDTO: UserLogin) {
         const user = await this.userService.login(userDTO);
         const token = await this.authService.login(user);
         return { user, token };
