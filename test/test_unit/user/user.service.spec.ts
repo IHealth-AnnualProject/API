@@ -1,12 +1,12 @@
 import {UserService} from "../../../src/user/user.service";
 import {Repository} from "typeorm";
-import {UserEntity} from "../../../dist/user/user.entity";
 import {Test, TestingModule} from "@nestjs/testing";
 import {getRepositoryToken} from "@nestjs/typeorm";
 import {UserDTO} from "../../../src/user/user.dto";
 let mockedRepository: MockType<Repository<UserEntity>>;
 
 import 'dotenv/config';
+import {UserEntity} from "../../../src/user/user.entity";
 
 export type MockType<T> = {
     [P in keyof T]: jest.Mock<{}>;
