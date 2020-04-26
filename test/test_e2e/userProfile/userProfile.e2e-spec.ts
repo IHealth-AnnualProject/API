@@ -105,7 +105,11 @@ describe("UserProfile route", ()=>{
         return request(app.getHttpServer())
             .post('/userProfile/moral-stats').set('Authorization', 'Bearer ' + token)
             .expect(400)
-            .expect({message:'Error in request did you send a good value? ',statusCode: 400});
+            .expect({
+                statusCode: 400,
+                message: [ 'value should not be empty' ],
+                error: 'Bad Request'
+            });
     });
 
     it('/ (POST) Create moral-stats  with value should return 200', async () => {

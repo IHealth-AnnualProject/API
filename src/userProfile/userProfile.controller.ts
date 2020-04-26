@@ -8,6 +8,8 @@ import {User} from "../decorator/user.decorator";
 import {ApiTags, ApiCreatedResponse, ApiBody} from "@nestjs/swagger";
 import {UserProfileService} from "./userProfile.service";
 import {ApiImplicitBody} from "@nestjs/swagger/dist/decorators/api-implicit-body.decorator";
+import {MoralStatsDTO, MoralStatsRO} from "../moral_stats/moralStats.dto";
+import {MoralStatCreation} from "./userProfile.validation";
 
 
 @ApiTags('userProfile')
@@ -31,7 +33,6 @@ export class UserProfileController {
     @UseGuards(JwtAuthGuard)
     @Get('')
     @ApiCreatedResponse({
-        description: 'The record has been successfully created.',
         type: [UserProfileDTO],
     })
     async read(@User() user) {
@@ -40,12 +41,18 @@ export class UserProfileController {
 
     @UseGuards(JwtAuthGuard)
     @Get(':id')
+    @ApiCreatedResponse({
+        type: UserProfileDTO,
+    })
     async findById(@Param() param) {
         return await this.userProfileService.read(param.id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('my-profile')
+    @ApiCreatedResponse({
+        type: UserProfileDTO,
+    })
     async findMyProfile(@User() user) {
         return await this.userProfileService.read(user.userId);
     }
@@ -62,13 +69,16 @@ export class UserProfileController {
 
     @UseGuards(JwtAuthGuard)
     @Post('moral-stats')
-    async addMoralStat(@User() user,@Body('value') value:number){
+    async addMoralStat(@User() user,@Body() moral:MoralStatCreation){
         //TODO restrictions par jour
-        return await this.userProfileService.addMoralStat(user.userId,value);
+        return await this.userProfileService.addMoralStat(user.userId,moral.value);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get(':userId/moral-stats')
+    @ApiCreatedResponse({
+        type: [MoralStatsRO],
+    })
     async getMoralStats(@Param() param)
     {
         //TODO sécuriser si les utilisateurs ne sont pas lié / amis

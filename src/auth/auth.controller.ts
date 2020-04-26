@@ -8,6 +8,7 @@ import {UserProfileDTO} from "../userProfile/userProfile.dto";
 import {UserLogin} from "./auth.validation";
 import {JwtAuthGuard} from "./jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
+import { TokenValidResponse} from "./auth.response";
 
 @Controller('auth')
 export class AuthController {
@@ -21,11 +22,12 @@ export class AuthController {
         type: UserAndTokenResponse,
     })
     @Post('login')
-    async login(@Body() userDTO: UserLogin) {
-        const user = await this.userService.login(userDTO);
+    async login(@Body() userLogin: UserLogin) {
+        const user = await this.userService.login(userLogin);
         const token = await this.authService.login(user);
         return { user, token };
     }
+
 
     @Post('register')
     async register(@Body() userDTO: UserDTO) {
@@ -35,9 +37,13 @@ export class AuthController {
         await this.userService.register(userDTO);
     }
 
+    @ApiCreatedResponse({
+        description: 'Users login.',
+        type: TokenValidResponse,
+    })
     @UseGuards(JwtAuthGuard)
     @Get('is-token-valid')
-    async findMyProfile(@User() user) {
+    async isTokenValid(@User() user) {
         return {user:user,statusCode:200}
     }
 }
