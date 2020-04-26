@@ -6,6 +6,8 @@ import {UserAndTokenResponse, UserDTO} from "../user/user.dto";
 import {ApiCreatedResponse} from "@nestjs/swagger";
 import {UserProfileDTO} from "../userProfile/userProfile.dto";
 import {UserLogin} from "./auth.validation";
+import {JwtAuthGuard} from "./jwt-auth.guard";
+import {User} from "../decorator/user.decorator";
 
 @Controller('auth')
 export class AuthController {
@@ -31,5 +33,11 @@ export class AuthController {
             throw new HttpException('Missing argument password or username', HttpStatus.BAD_REQUEST);
         }
         await this.userService.register(userDTO);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('is-token-valid')
+    async findMyProfile(@User() user) {
+        return {user:user,statusCode:200}
     }
 }

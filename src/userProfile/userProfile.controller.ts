@@ -45,6 +45,13 @@ export class UserProfileController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get('my-profile')
+    async findMyProfile(@User() user) {
+        return await this.userProfileService.read(user.userId);
+    }
+
+
+    @UseGuards(JwtAuthGuard)
     @Patch('')
     @HttpCode(204)
     async update(@User() user,@Body() patientDto:UserProfileDTO)

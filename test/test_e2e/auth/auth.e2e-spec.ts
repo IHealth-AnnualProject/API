@@ -77,11 +77,37 @@ describe("Auth route", ()=>{
             .expect(201)
     });
 
-    it('/ (POST) Login with argument should return 200', () => {
-        return request(app.getHttpServer())
+    it('/ (POST) Login with argument should return 200', async () => {
+        let result = await request(app.getHttpServer())
             .post('/auth/login')
             .send({username:"pablota",password:"escobar"})
             .expect(201);
+        let token = result.body.token;
+        let user = result.body.user;
+        return await request(app.getHttpServer())
+            .post('/auth/login')
+            .send({username:"pablota",password:"escobar"})
+            .expect(201)
+            .expect({user:user,token:token})
+    });
+
+    it('/ (GET) Is token valid should return 200 and user', async () => {
+        let result = await request(app.getHttpServer())
+            .post('/auth/login')
+            .send({username:"pablota",password:"escobar"})
+            .expect(201);
+        let token = result.body.token.access_token;
+        let userId = result.body.user.id;
+        return request(app.getHttpServer())
+            .get('/auth/is-token-valid').set('Authorization', 'Bearer ' + token)
+            .expect(200).expect({
+                user: {
+                    userId: userId,
+                    username: 'pablota',
+                    isPsy: true
+                },
+                statusCode: 200
+            });
     });
 
     afterAll(async () => {
