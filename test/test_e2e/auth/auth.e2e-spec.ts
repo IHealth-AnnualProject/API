@@ -111,6 +111,7 @@ describe("Auth route", ()=>{
     });
 
     afterAll(async () => {
+        await repository.query('DELETE FROM user_profile;');
         await repository.query('DELETE FROM user;');
         await app.close();
     });

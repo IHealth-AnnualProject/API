@@ -25,8 +25,8 @@ export class MoralStatsService {
         return;
     }
 
-    async getMoralStats(userId:string){
-        let res = await this.moralStatsRepository.find({where:{userProfile:userId}});
+    async getMoralStats(userProfileId:string){
+        let res = await this.moralStatsRepository.find({where:{userProfile:userProfileId}});
         if(!res){
             throw new HttpException('No data found for this user', HttpStatus.NOT_FOUND);
         }

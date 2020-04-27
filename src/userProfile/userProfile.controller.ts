@@ -28,7 +28,8 @@ export class UserProfileController {
             patientDto.user = user.userId;
             return await this.userProfileService.create(patientDto);
         }
-        throw new HttpException('You cant create userProfile as a psy', HttpStatus.UNAUTHORIZED);    }
+        throw new HttpException('You cant create userProfile as a psy', HttpStatus.UNAUTHORIZED);
+    }
 
     @UseGuards(JwtAuthGuard)
     @Get('')
@@ -40,6 +41,15 @@ export class UserProfileController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get(':id/user')
+    @ApiCreatedResponse({
+        type: UserProfileDTO,
+    })
+    async findByIdUser(@Param() param) {
+        return await this.userProfileService.findByUserId(param.id);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     @ApiCreatedResponse({
         type: UserProfileDTO,
@@ -48,14 +58,6 @@ export class UserProfileController {
         return await this.userProfileService.read(param.id);
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Get('my-profile')
-    @ApiCreatedResponse({
-        type: UserProfileDTO,
-    })
-    async findMyProfile(@User() user) {
-        return await this.userProfileService.read(user.userId);
-    }
 
 
     @UseGuards(JwtAuthGuard)
@@ -70,18 +72,19 @@ export class UserProfileController {
     @UseGuards(JwtAuthGuard)
     @Post('moral-stats')
     async addMoralStat(@User() user,@Body() moral:MoralStatCreation){
-        //TODO restrictions par jour
         return await this.userProfileService.addMoralStat(user.userId,moral.value);
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get(':userId/moral-stats')
+    @Get(':userProfileId/moral-stats')
     @ApiCreatedResponse({
         type: [MoralStatsRO],
     })
     async getMoralStats(@Param() param)
     {
         //TODO sécuriser si les utilisateurs ne sont pas lié / amis
-        return await this.userProfileService.getMoralStats(param.userId)
+        console.log(param.userProfileId);
+        return await this.userProfileService.getMoralStats(param.userProfileId)
     }
+
 }

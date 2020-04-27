@@ -1,5 +1,5 @@
 
-import { Module } from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -14,8 +14,8 @@ import {MoralStatsModule} from "../moral_stats/moralStats.module";
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserProfileEntity]),AuthModule
-    ,MoralStatsModule,UserModule],
+    imports: [TypeOrmModule.forFeature([UserProfileEntity])
+    ,MoralStatsModule],
     providers: [UserProfileService],
     controllers:[UserProfileController],
     exports: [UserProfileService],

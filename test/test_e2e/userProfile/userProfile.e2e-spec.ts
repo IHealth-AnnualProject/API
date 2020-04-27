@@ -10,15 +10,17 @@ let repository: Repository<UserProfileEntity>;
 import 'dotenv/config';
 import {UserProfileModule} from "../../../src/userProfile/userProfile.module";
 import {UserProfileEntity} from "../../../src/userProfile/userProfile.entity";
+import * as Assert from "assert";
 jest.setTimeout(10000);
 let token;
 let id;
+let userId;
 describe("UserProfile route", ()=>{
     beforeAll(async()=> {
         const module = await
             Test.createTestingModule({
                 imports: [
-                    UserProfileModule,
+                    UserProfileModule,AuthModule,
                     // Use the e2e_test database to run the tests
                     TypeOrmModule.forRoot({
                         type: "mysql",
@@ -41,6 +43,7 @@ describe("UserProfile route", ()=>{
         await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar" ,isPsy:false});
         let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
         token = result.body.token.access_token;
+        userId = result.body.user.id;
     });
 
     it('/ (POST) Create userProfile without login should return 401', async () => {
@@ -54,9 +57,7 @@ describe("UserProfile route", ()=>{
     it('/ (POST) Create userProfile with login should return 201', async () => {
         let res = await request(app.getHttpServer())
             .post('/userProfile').set('Authorization', 'Bearer ' + token).send({first_name:"pablaa"})
-            .expect(201);
-        expect(res.body.first_name).toEqual("pablaa");
-        id = res.body.id;
+            .expect(409);
     });
 
     it('/ (POST) Create second userProfile should return 409', async () => {
@@ -72,11 +73,36 @@ describe("UserProfile route", ()=>{
             .expect(204)
     });
 
-    it('/ (Get) Get userProfile return 200', () => {
-        return request(app.getHttpServer())
+    it('/ (Get) Get userProfile return 200', async () => {
+        let result = await request(app.getHttpServer())
             .get('/userProfile').set('Authorization', 'Bearer ' + token)
-            .expect(200)
-            .expect([{ id:id,first_name: 'pablo', last_name: '', age: '', description: '' }]);
+            .expect(200);
+        expect(result.body[0].first_name).toBe('pablo');
+        id = result.body[0].id;
+    });
+
+    it('/ (Get) Get userProfile/id/user return 200', async () => {
+        let result = await request(app.getHttpServer())
+            .get('/userProfile/'+userId+'/user').set('Authorization', 'Bearer ' + token)
+            .expect(200).expect({
+                id: id,
+                first_name: 'pablo',
+                last_name: '',
+                age: '',
+                description: ''
+            });
+    });
+
+    it('/ (Get) Get userProfile/id return 200', async () => {
+        let result = await request(app.getHttpServer())
+            .get('/userProfile/'+id).set('Authorization', 'Bearer ' + token)
+            .expect(200).expect({
+                id: id,
+                first_name: 'pablo',
+                last_name: '',
+                age: '',
+                description: ''
+            });
     });
 
     it('/ (Get) Get userProfile with id should return 200', async () => {
@@ -90,7 +116,6 @@ describe("UserProfile route", ()=>{
             .get('/userProfile/'+id+'/moral-stats').set('Authorization', 'Bearer ' + token)
             .expect(200);
         expect(res.body.length).toBe(2);
-
     });
 
     //--- MORAL STATS ---

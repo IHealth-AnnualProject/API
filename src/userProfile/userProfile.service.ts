@@ -17,35 +17,35 @@ export class UserProfileService {
         private moralStatsService:MoralStatsService,
     ) {}
 
-    async getMoralStats(userId:string){
-        return await this.moralStatsService.getMoralStats(userId);
+    async getMoralStats(userProfileId:string){
+        return await this.moralStatsService.getMoralStats(userProfileId);
     }
 
-    async read(userId:number){
-        let user = await this.userProfileEntityRepository.findOne({where:{id:userId}});
+    async read(id:string){
+        let user = await this.userProfileEntityRepository.findOne({where:{id:id}});
         if(!user){
             throw new HttpException('profile not found', HttpStatus.NOT_FOUND);
         }
         return user.toResponseObject();
     }
-    async create(patientDTO:UserProfileDTO){
-        let patient = await this.userProfileEntityRepository.findOne({where:{user:patientDTO.user}});
-        if(patient) {
+    async create(userId:UserProfileDTO){
+        let userProfile = await this.userProfileEntityRepository.findOne({where:{user:userId.user}});
+        if(userProfile) {
             throw new HttpException('User have already a profile.', HttpStatus.CONFLICT);
         }
-        patient = await this.userProfileEntityRepository.create(patientDTO);
-        await this.userProfileEntityRepository.save(patient);
-        return patient.toResponseObject();
+        userProfile = await this.userProfileEntityRepository.create(userId);
+        await this.userProfileEntityRepository.save(userProfile);
+        return userProfile.toResponseObject();
     }
 
-    async update(patientDTO: UserProfileDTO) {
-        let patient = await this.userProfileEntityRepository.findOne({where:{user:patientDTO.user}});
-        if(!patient){
+    async update(userProfileDTO: UserProfileDTO) {
+        let userProfile = await this.userProfileEntityRepository.findOne({where:{user:userProfileDTO.user}});
+        if(!userProfile){
             throw new HttpException('profile not found', HttpStatus.NOT_FOUND);
         }
-        await this.userProfileEntityRepository.update(patient.id, patientDTO);
-        patient =await this.userProfileEntityRepository.findOne({where:{user:patientDTO.user}});
-        return patient.toResponseObject();
+        await this.userProfileEntityRepository.update(userProfile.id, userProfileDTO);
+        userProfile =await this.userProfileEntityRepository.findOne({where:{user:userProfileDTO.user}});
+        return userProfile.toResponseObject();
     }
 
     async findAll(){
@@ -54,6 +54,14 @@ export class UserProfileService {
                 this[index] = part.toResponseObject();
             }, users);
         return users;
+    }
+
+    async findByUserId(userId:string){
+        let user = await this.userProfileEntityRepository.findOne({where:{user:userId}});
+        if(!user){
+            throw new HttpException('profile not found', HttpStatus.NOT_FOUND);
+        }
+        return user.toResponseObject();
     }
 
     async addMoralStat(userId: string , value: number) {
