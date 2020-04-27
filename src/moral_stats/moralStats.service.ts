@@ -13,7 +13,10 @@ export class MoralStatsService {
                 private moralStatsRepository: Repository<MoralStatsEntity>) {}
 
     async addMoralStat(userProfile:UserProfileEntity,value:number) {
-        if(!userProfile || !value || value<0 || value>5){
+        if(!userProfile){
+            throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+        }
+        if( !value || value<0 || value>5){
             throw new HttpException('Error in request did you send a good value? ', HttpStatus.BAD_REQUEST);
         }
         let moralStatCreated = await this.moralStatsRepository.create({value:value,userProfile:userProfile});
