@@ -15,7 +15,7 @@ import {MoralStatsModule} from "../moral_stats/moralStats.module";
 
 @Module({
     imports: [TypeOrmModule.forFeature([UserProfileEntity]),AuthModule
-    ,MoralStatsModule],
+    ,MoralStatsModule,UserModule],
     providers: [UserProfileService],
     controllers:[UserProfileController],
     exports: [UserProfileService],
