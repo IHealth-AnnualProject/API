@@ -8,6 +8,7 @@ import {ApiTags, ApiCreatedResponse, ApiBody} from "@nestjs/swagger";
 import {ApiImplicitBody} from "@nestjs/swagger/dist/decorators/api-implicit-body.decorator";
 import {PsychologistDTO} from "./psychologist.dto";
 import {PsychologistService} from "./psychologist.service";
+import {UserProfileDTO} from "../userProfile/userProfile.dto";
 
 
 
@@ -54,5 +55,14 @@ export class PsychologistController {
     {
         patientDto.user = user.userId;
         return await this.psychologistService.update(patientDto);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get(':id/user')
+    @ApiCreatedResponse({
+        type: UserProfileDTO,
+    })
+    async findByIdUser(@Param() param) {
+        return await this.psychologistService.findByUserId(param.id);
     }
 }

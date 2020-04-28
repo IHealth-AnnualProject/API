@@ -93,8 +93,8 @@ describe("UserProfile route", ()=>{
             });
     });
 
-    it('/ (Get) Get userProfile/id return 200', async () => {
-        let result = await request(app.getHttpServer())
+    it('/ (Get) Get userProfile/id return 200',  () => {
+        request(app.getHttpServer())
             .get('/userProfile/'+id).set('Authorization', 'Bearer ' + token)
             .expect(200).expect({
                 id: id,
@@ -155,6 +155,7 @@ describe("UserProfile route", ()=>{
     });
 
     afterAll(async () => {
+        await repository.query('DELETE FROM psychologist;');
         await repository.query('DELETE FROM moral_stats;');
         await repository.query('DELETE FROM user_profile;');
         await repository.query('DELETE FROM user;');

@@ -3,7 +3,6 @@ import {
     BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne,
     PrimaryGeneratedColumn
 } from "typeorm";
-import {MoralStatsEntity} from "../moral_stats/moralStats.entity";
 import {PsychologistRO} from "./psychologist.dto";
 import {UserEntity} from "../user/user.entity";
 

@@ -28,12 +28,12 @@ export class UserProfileService {
         }
         return user.toResponseObject();
     }
-    async create(userId:UserProfileDTO){
-        let userProfile = await this.userProfileEntityRepository.findOne({where:{user:userId.user}});
+    async create(userProfileDto:UserProfileDTO){
+        let userProfile = await this.userProfileEntityRepository.findOne({where:{user:userProfileDto.user}});
         if(userProfile) {
             throw new HttpException('User have already a profile.', HttpStatus.CONFLICT);
         }
-        userProfile = await this.userProfileEntityRepository.create(userId);
+        userProfile = await this.userProfileEntityRepository.create(userProfileDto);
         await this.userProfileEntityRepository.save(userProfile);
         return userProfile.toResponseObject();
     }

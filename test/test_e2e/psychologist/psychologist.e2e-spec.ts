@@ -12,6 +12,7 @@ import {PsychologistEntity} from "../../../src/psychologist/psychologist.entity"
 jest.setTimeout(10000);
 let token;
 let id;
+let userId;
 describe("Psychologist route", ()=>{
     beforeAll(async()=> {
         const module = await
@@ -19,7 +20,6 @@ describe("Psychologist route", ()=>{
                 imports: [
                     PsychologistModule,
                     AuthModule,
-                    // Use the e2e_test database to run the tests
                     TypeOrmModule.forRoot({
                         type: "mysql",
                         host: process.env.NEST_HOST,
@@ -37,16 +37,17 @@ describe("Psychologist route", ()=>{
         app.useGlobalPipes(new ValidationPipe());
 
         await app.init();
-        repository = module.get('PsychologistEntityRepository');
+        repository = module.get('UserProfileEntityRepository');
         await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar",isPsy:true });
         let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
         token = result.body.token.access_token;
+        userId = result.body.user.id;
     });
     it('/ (POST) Create psychologist without login should return 401', () => {
 
             expect(1).toBe(1);
     });
-/*
+
     it('/ (POST) Create psychologist without login should return 401', () => {
 
         return request(app.getHttpServer())
@@ -90,9 +91,34 @@ describe("Psychologist route", ()=>{
         return await request(app.getHttpServer())
             .post('/psychologist').set('Authorization', 'Bearer ' + tokenUser)
             .expect(401).expect({message:'You are not a psy',statusCode:401});
-    });*/
+    });
+
+    it('/ (Get) Get psychologist/id/user return 200',  () => {
+       request(app.getHttpServer())
+            .get('/psychologist/'+userId+'/user').set('Authorization', 'Bearer ' + token)
+            .expect(200).expect({
+                id: id,
+                first_name: 'pablo',
+                last_name: '',
+                age: '',
+                description: ''
+            });
+    });
+
+    it('/ (Get) Get psychologist/id return 200',  () => {
+        request(app.getHttpServer())
+            .get('/psychologist/'+id).set('Authorization', 'Bearer ' + token)
+            .expect(200).expect({
+                id: id,
+                first_name: 'pablo',
+                last_name: '',
+                age: '',
+                description: ''
+            });
+    });
 
     afterAll(async () => {
+        await repository.query('DELETE FROM user_profile;');
         await repository.query('DELETE FROM psychologist;');
         await repository.query('DELETE FROM user;');
         await app.close();

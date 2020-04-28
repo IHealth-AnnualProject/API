@@ -18,8 +18,8 @@ export class PsychologistService {
     ) {}
 
 
-    async read(userId:number){
-        let user = await this.userProfileEntityRepository.findOne({where:{id:userId}});
+    async read(id:number){
+        let user = await this.userProfileEntityRepository.findOne({where:{id:id}});
         if(!user){
             throw new HttpException('profile not found', HttpStatus.NOT_FOUND);
         }
@@ -52,5 +52,13 @@ export class PsychologistService {
                 this[index] = part.toResponseObject();
             }, users);
         return users;
+    }
+
+    async findByUserId(userId:string){
+        let user = await this.userProfileEntityRepository.findOne({where:{user:userId}});
+        if(!user){
+            throw new HttpException('profile not found', HttpStatus.NOT_FOUND);
+        }
+        return user.toResponseObject();
     }
 }
