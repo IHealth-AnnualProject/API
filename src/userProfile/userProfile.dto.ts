@@ -14,6 +14,8 @@ export class UserProfileDTO {
     age: number;
     @ApiPropertyOptional()
     geolocation:string;
+    @ApiPropertyOptional()
+    description: string;
 
     email:string;
 
