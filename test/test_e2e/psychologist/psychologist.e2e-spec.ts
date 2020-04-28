@@ -43,10 +43,6 @@ describe("Psychologist route", ()=>{
         token = result.body.token.access_token;
         userId = result.body.user.id;
     });
-    it('/ (POST) Create psychologist without login should return 401', () => {
-
-            expect(1).toBe(1);
-    });
 
     it('/ (POST) Create psychologist without login should return 401', () => {
 
@@ -56,12 +52,20 @@ describe("Psychologist route", ()=>{
             .expect({message:"Unauthorized",statusCode: 401});
     });
 
-    it('/ (POST) Create psychologist with login should return 201', async () => {
-        let res = await request(app.getHttpServer())
+    it('/ (Get) Get psychologist return 200', async () => {
+         let res = await request(app.getHttpServer())
+            .get('/psychologist').set('Authorization', 'Bearer ' + token)
+            .expect(200);
+         expect(res.body.length).toBe(1);
+         id = res.body[0].id
+    });
+
+
+
+    it('/ (POST) Create psychologist with login should return 201',  () => {
+       return request(app.getHttpServer())
             .post('/psychologist').set('Authorization', 'Bearer ' + token).send({first_name:"pablaa"})
-            .expect(201);
-        expect(res.body.first_name).toEqual("pablaa");
-        id = res.body.id;
+            .expect(409);
     });
 
     it('/ (POST) Create second psychologist should return 409',  () => {
@@ -77,12 +81,6 @@ describe("Psychologist route", ()=>{
             .expect(204)
     });
 
-    it('/ (Get) Get psychologist return 200', () => {
-        return request(app.getHttpServer())
-            .get('/psychologist').set('Authorization', 'Bearer ' + token)
-            .expect(200)
-            .expect([{ id:id,first_name: 'pablo', last_name: '', age: '', description: '' }]);
-    });
 
     it('/ (Get) Should not create a psy with a user account', async () => {
         await request(app.getHttpServer()).post('/auth/register').send({username:"user",password:"escobar",isPsy:false});

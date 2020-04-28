@@ -10,13 +10,15 @@ import {JwtAuthGuard} from "./jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
 import { TokenValidResponse} from "./auth.response";
 import {UserProfileService} from "../userProfile/userProfile.service";
+import {PsychologistService} from "../psychologist/psychologist.service";
 
 @Controller('auth')
 export class AuthController {
     constructor(
         private userService: UserService,
         private authService: AuthService,
-        private userProfileService:UserProfileService
+        private userProfileService:UserProfileService,
+        private psychologistService:PsychologistService
     ) {}
 
     @ApiCreatedResponse({
@@ -37,11 +39,14 @@ export class AuthController {
             throw new HttpException('Missing argument password or username', HttpStatus.BAD_REQUEST);
         }
         let user = await this.userService.register(userDTO);
+        let userProfileDto:UserProfileDTO =new UserProfileDTO();
+        userProfileDto.user=user.id;
         if(!user.isPsy){
-            let userProfileDto:UserProfileDTO =new UserProfileDTO();
-            userProfileDto.user=user.id;
             this.userProfileService.create(userProfileDto);
+            return;
         }
+        this.psychologistService.create(userProfileDto);
+
     }
 
     @ApiCreatedResponse({

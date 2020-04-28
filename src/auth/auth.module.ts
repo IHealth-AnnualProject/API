@@ -10,6 +10,7 @@ import {JwtStrategy} from "./jwt.strategy";
 import {LocalStrategy} from "./local.strategy";
 import {AuthController} from "./auth.controller";
 import {UserProfileModule} from "../userProfile/userProfile.module";
+import {PsychologistModule} from "../psychologist/psychologist.module";
 
 
 @Module({
@@ -21,6 +22,7 @@ import {UserProfileModule} from "../userProfile/userProfile.module";
             signOptions: { expiresIn: '1h' },
         }),
         UserProfileModule,
+        PsychologistModule,
     ],
     providers: [AuthService, LocalStrategy, JwtStrategy],
     controllers:[AuthController],
