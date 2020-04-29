@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
+import {UserProfileRO} from "../userProfile/userProfile.dto";
 
 
 export class UserDTO {
@@ -37,4 +38,6 @@ export class UserAndTokenResponse {
     user:UserRO;
     @ApiProperty()
     token:Token;
+    @ApiProperty()
+    profileId:string;
 }

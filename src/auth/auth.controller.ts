@@ -29,7 +29,17 @@ export class AuthController {
     async login(@Body() userLogin: UserLogin) {
         const user = await this.userService.login(userLogin);
         const token = await this.authService.login(user);
-        return { user, token };
+        console.log(user.id);
+        let profile;
+        if(user.isPsy) {
+            profile = await this.psychologistService.findByUserId(user.id);
+        }else{
+            profile = await this.userProfileService.findByUserId(user.id);
+        }
+
+        let profileId:string = profile.id;
+
+        return {profileId, user, token };
     }
 
 

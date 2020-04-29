@@ -128,7 +128,7 @@ describe("UserProfile route", ()=>{
     it('/ (Get) Get userProfile with id should return 200', async () => {
         await request(app.getHttpServer())
             .post('/userProfile/moral-stats')
-            .set('Authorization', 'Bearer ' + token).send({value:3});
+            .set('Authorization', 'Bearer ' + token).send({value:0});
        await request(app.getHttpServer())
                 .post('/userProfile/moral-stats')
                 .set('Authorization', 'Bearer ' + token).send({value:2});

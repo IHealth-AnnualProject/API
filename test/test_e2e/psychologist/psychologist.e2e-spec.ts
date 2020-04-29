@@ -45,7 +45,6 @@ describe("Psychologist route", ()=>{
     });
 
     it('/ (POST) Create psychologist without login should return 401', () => {
-
         return request(app.getHttpServer())
             .post('/psychologist')
             .expect(401)

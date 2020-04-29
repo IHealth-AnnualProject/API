@@ -41,12 +41,12 @@ export class UserProfileController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get(':id/user')
+    @Get(':userId/user')
     @ApiCreatedResponse({
         type: UserProfileRO,
     })
     async findByIdUser(@Param() param) {
-        return await this.userProfileService.findByUserId(param.id);
+        return await this.userProfileService.findByUserId(param.userId);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -57,8 +57,6 @@ export class UserProfileController {
     async findById(@Param() param) {
         return await this.userProfileService.read(param.id);
     }
-
-
 
     @UseGuards(JwtAuthGuard)
     @Patch('')
