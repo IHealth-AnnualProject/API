@@ -73,7 +73,7 @@ describe("UserProfile route", ()=>{
                 first_name: "pablo",
                 last_name: "lastname",
                 age: 12,
-                geolocation: "",
+                geolocation: null,
                 description: "description"
             })
             .expect(204)
