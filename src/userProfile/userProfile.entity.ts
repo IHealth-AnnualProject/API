@@ -37,6 +37,10 @@ export class UserProfileEntity {
     description: string;
 
     toResponseObject(): UserProfileRO {
-        return {id:this.id,first_name:this.first_name,last_name:this.last_name,age:this.age,description:this.description};
+        let user:any = this.user;
+        if(user instanceof UserEntity ){
+            user=user.toResponseObject();
+        }
+        return {id:this.id,first_name:this.first_name,last_name:this.last_name,age:this.age,description:this.description,user:user};
     }
 }

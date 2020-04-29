@@ -33,4 +33,6 @@ export class UserProfileRO{
     age: number;
 
     description:string;
+
+    user;
 }

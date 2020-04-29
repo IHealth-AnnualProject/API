@@ -15,6 +15,7 @@ jest.setTimeout(10000);
 let token;
 let id;
 let userId;
+let creationDate;
 describe("UserProfile route", ()=>{
     beforeAll(async()=> {
         const module = await
@@ -55,7 +56,7 @@ describe("UserProfile route", ()=>{
     });
 
     it('/ (POST) Create userProfile with login should return 201', async () => {
-        let res = await request(app.getHttpServer())
+        return await request(app.getHttpServer())
             .post('/userProfile').set('Authorization', 'Bearer ' + token).send({first_name:"pablaa"})
             .expect(409);
     });
@@ -66,7 +67,7 @@ describe("UserProfile route", ()=>{
             .expect(409)
             .expect({message:'User have already a profile.',statusCode:409});
     });
-
+    //todo check for localisation string error
     it('/ (PATCH) Modify userProfile should return 200', () => {
         return request(app.getHttpServer())
             .patch('/userProfile').set('Authorization', 'Bearer ' + token).send({
@@ -85,29 +86,42 @@ describe("UserProfile route", ()=>{
             .expect(200);
         expect(result.body[0].first_name).toBe('pablo');
         id = result.body[0].id;
+        creationDate = result.body[0].user.created
     });
 
     it('/ (Get) Get userProfile/id/user return 200', async () => {
-        let result = await request(app.getHttpServer())
+        return await request(app.getHttpServer())
             .get('/userProfile/'+userId+'/user').set('Authorization', 'Bearer ' + token)
             .expect(200).expect({
                 id: id,
                 first_name: 'pablo',
                 last_name: 'lastname',
                 age: '12',
-                description: 'description'
+                description: 'description',
+                user: {
+                    id: userId,
+                    created: creationDate,
+                    username: 'pabla',
+                    isPsy: false
+                }
             });
     });
 
     it('/ (Get) Get userProfile/id return 200',  () => {
-        request(app.getHttpServer())
+     return   request(app.getHttpServer())
             .get('/userProfile/'+id).set('Authorization', 'Bearer ' + token)
             .expect(200).expect({
                 id: id,
                 first_name: 'pablo',
-                last_name: '',
-                age: '',
-                description: ''
+                last_name: 'lastname',
+                age: '12',
+                description: 'description',
+                user: {
+                     id: userId,
+                     created: creationDate,
+                     username: 'pabla',
+                     isPsy: false
+                 }
             });
     });
 
@@ -121,7 +135,7 @@ describe("UserProfile route", ()=>{
          let res = await request(app.getHttpServer())
             .get('/userProfile/'+id+'/moral-stats').set('Authorization', 'Bearer ' + token)
             .expect(200);
-        expect(res.body.length).toBe(2);
+        return expect(res.body.length).toBe(2);
     });
 
     //--- MORAL STATS ---
