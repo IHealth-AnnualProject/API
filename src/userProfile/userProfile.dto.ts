@@ -3,6 +3,7 @@ import {Column, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {MoralStatsDTO} from "../moral_stats/moralStats.dto";
 import {UserRO} from "../user/user.dto";
+import {UserEntity} from "../user/user.entity";
 
 
 export class UserProfileDTO {
@@ -25,14 +26,16 @@ export class UserProfileDTO {
 }
 
 export class UserProfileRO{
+    @ApiPropertyOptional()
     id:string;
+    @ApiPropertyOptional()
     first_name: string;
-
+    @ApiPropertyOptional()
     last_name: string;
-
+    @ApiPropertyOptional()
     age: number;
-
+    @ApiPropertyOptional()
     description:string;
-
-    user;
+    @ApiPropertyOptional()
+    user:UserRO
 }

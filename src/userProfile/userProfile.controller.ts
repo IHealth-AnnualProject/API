@@ -34,7 +34,7 @@ export class UserProfileController {
     @UseGuards(JwtAuthGuard)
     @Get('')
     @ApiCreatedResponse({
-        type: [UserProfileDTO],
+        type: [UserProfileRO],
     })
     async read(@User() user) {
         return await this.userProfileService.findAll();
@@ -43,7 +43,7 @@ export class UserProfileController {
     @UseGuards(JwtAuthGuard)
     @Get(':id/user')
     @ApiCreatedResponse({
-        type: UserProfileDTO,
+        type: UserProfileRO,
     })
     async findByIdUser(@Param() param) {
         return await this.userProfileService.findByUserId(param.id);
@@ -52,7 +52,7 @@ export class UserProfileController {
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     @ApiCreatedResponse({
-        type: UserProfileDTO,
+        type: UserProfileRO,
     })
     async findById(@Param() param) {
         return await this.userProfileService.read(param.id);
