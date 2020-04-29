@@ -69,7 +69,13 @@ describe("UserProfile route", ()=>{
 
     it('/ (PATCH) Modify userProfile should return 200', () => {
         return request(app.getHttpServer())
-            .patch('/userProfile').set('Authorization', 'Bearer ' + token).send({first_name:"pablo"})
+            .patch('/userProfile').set('Authorization', 'Bearer ' + token).send({
+                first_name: "pablo",
+                last_name: "lastname",
+                age: 12,
+                geolocation: "",
+                description: "description"
+            })
             .expect(204)
     });
 
@@ -87,9 +93,9 @@ describe("UserProfile route", ()=>{
             .expect(200).expect({
                 id: id,
                 first_name: 'pablo',
-                last_name: '',
-                age: '',
-                description: ''
+                last_name: 'lastname',
+                age: '12',
+                description: 'description'
             });
     });
 
