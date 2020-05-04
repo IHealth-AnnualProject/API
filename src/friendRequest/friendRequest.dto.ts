@@ -1,5 +1,5 @@
 import {ApiProperty} from "@nestjs/swagger";
-import {FriendRequestState} from "./FriendRequest.entity";
+import {FriendRequestState} from "./friendRequest.entity";
 
 
 export class FriendRequestDTO {
