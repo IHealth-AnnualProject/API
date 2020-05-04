@@ -7,6 +7,8 @@ let mockedRepository: MockType<Repository<UserEntity>>;
 
 import 'dotenv/config';
 import {UserEntity} from "../../../src/user/user.entity";
+import {FriendsService} from "../../../src/friends/friends.service";
+import {FriendsEntity} from "../../../src/friends/friends.entity";
 
 export type MockType<T> = {
     [P in keyof T]: jest.Mock<{}>;
@@ -20,8 +22,10 @@ describe('UserService', ()=>{
         module = await Test.createTestingModule({
             providers: [
                 UserService,
+                FriendsService,
                 // Provide your mock instead of the actual repository
                 {provide: getRepositoryToken(UserEntity), useFactory: repositoryMockFactory},
+                {provide: getRepositoryToken(FriendsEntity), useFactory: repositoryMockFactory},
             ],
         }).compile();
 

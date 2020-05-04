@@ -2,7 +2,8 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import {UserRO} from "./user.dto";
-import {BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {FriendsEntity} from "../friends/friends.entity";
 
 @Entity('user')
 export class UserEntity {
@@ -21,6 +22,8 @@ export class UserEntity {
     @Column('text')
     password: string;
 
+    @OneToMany(type =>FriendsEntity, friends => friends.user)
+    friends:UserEntity[];
 
     @Column('boolean')
     isPsy: boolean;

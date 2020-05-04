@@ -1,6 +1,6 @@
 
 import {
-    BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne,
+    BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn,
     PrimaryGeneratedColumn
 } from "typeorm";
 import {PsychologistRO} from "./psychologist.dto";
@@ -8,7 +8,7 @@ import {UserEntity} from "../user/user.entity";
 
 @Entity('psychologist')
 export class PsychologistEntity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn('uuid')
     id: string;
 
     @Column('text')

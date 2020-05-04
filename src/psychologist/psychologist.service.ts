@@ -6,7 +6,7 @@ import {Repository} from "typeorm";
 import {MoralStatsEntity} from "../moral_stats/moralStats.entity";
 import {MoralStatsService} from "../moral_stats/moralStats.service";
 import {PsychologistEntity} from "./psychologist.entity";
-import {PsychologistDTO} from "./psychologist.dto";
+import {PsychologistDTO, PsychologistDTOID} from "./psychologist.dto";
 
 
 @Injectable()
@@ -26,8 +26,8 @@ export class PsychologistService {
         return user.toResponseObject();
     }
 
-    async create(psychologistDTO:PsychologistDTO){
-        let psychologist = await this.userProfileEntityRepository.findOne({where:{user:psychologistDTO.user}});
+    async create(psychologistDTO:PsychologistDTOID){
+        let psychologist = await this.userProfileEntityRepository.findOne({where:{id:psychologistDTO.id}});
         if(psychologist) {
             throw new HttpException('User have already a profile.', HttpStatus.CONFLICT);
         }

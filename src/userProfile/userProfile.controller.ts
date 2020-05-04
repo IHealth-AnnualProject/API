@@ -18,7 +18,7 @@ export class UserProfileController {
     constructor(
         private userProfileService: UserProfileService,
     ) {}
-
+    /*
     //You cant create userProfile as a psy
     @UseGuards(JwtAuthGuard)
     @Post('')
@@ -29,7 +29,7 @@ export class UserProfileController {
             return await this.userProfileService.create(patientDto);
         }
         throw new HttpException('You cant create userProfile as a psy', HttpStatus.UNAUTHORIZED);
-    }
+    }*/
 
     @UseGuards(JwtAuthGuard)
     @Get('')
@@ -81,8 +81,14 @@ export class UserProfileController {
     async getMoralStats(@Param() param)
     {
         //TODO sécuriser si les utilisateurs ne sont pas lié / amis
-        console.log(param.userProfileId);
         return await this.userProfileService.getMoralStats(param.userProfileId)
+    }
+    //TODO rajouter une verif sur l'user
+    @UseGuards(JwtAuthGuard)
+    @Get(':userProfileId/friends')
+    async getFriend(@Param() param,@User() user)
+    {
+        return await this.userProfileService.getFriend(param.userProfileId);
     }
 
 }

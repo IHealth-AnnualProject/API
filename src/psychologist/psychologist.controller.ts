@@ -19,7 +19,7 @@ export class PsychologistController {
         private psychologistService: PsychologistService,
     ) {}
 
-
+    /*
     @UseGuards(JwtAuthGuard)
     @Post('')
     async create(@User() user,@Body() patientDto:PsychologistDTO)
@@ -30,7 +30,7 @@ export class PsychologistController {
         return await this.psychologistService.create(patientDto);
         }
         throw new HttpException('You are not a psy', HttpStatus.UNAUTHORIZED);
-    }
+    }*/
 
     @UseGuards(JwtAuthGuard)
     @Get('')

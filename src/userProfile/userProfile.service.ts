@@ -1,11 +1,13 @@
 import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
-import {UserProfileDTO} from "./userProfile.dto";
+import {UserProfileDTO, UserProfileDTOID} from "./userProfile.dto";
 import {UserEntity} from "../user/user.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {UserProfileEntity} from "./userProfile.entity";
 import {MoralStatsEntity} from "../moral_stats/moralStats.entity";
 import {MoralStatsService} from "../moral_stats/moralStats.service";
+import {FriendsService} from "../friends/friends.service";
+import {UserService} from "../user/user.service";
 
 
 @Injectable()
@@ -15,6 +17,7 @@ export class UserProfileService {
         @InjectRepository(UserProfileEntity)
         private userProfileEntityRepository: Repository<UserProfileEntity>,
         private moralStatsService:MoralStatsService,
+        private friendsService:FriendsService
     ) {}
 
     async getMoralStats(userProfileId:string){
@@ -28,7 +31,7 @@ export class UserProfileService {
         }
         return user.toResponseObject();
     }
-    async create(userProfileDto:UserProfileDTO){
+    async create(userProfileDto:UserProfileDTOID){
         let userProfile = await this.userProfileEntityRepository.findOne({where:{user:userProfileDto.user}, relations: ["user"]});
         if(userProfile) {
             throw new HttpException('User have already a profile.', HttpStatus.CONFLICT);
@@ -67,5 +70,13 @@ export class UserProfileService {
     async addMoralStat(userId: string , value: number) {
         let user = await this.userProfileEntityRepository.findOne({where:{user:userId} , relations: ["user"]});
         return await this.moralStatsService.addMoralStat(user,value)
+    }
+
+    async findOne(id: string): Promise<UserProfileEntity | undefined> {
+        return await this.userProfileEntityRepository.findOne({ where: { id } });
+    }
+
+    async getFriend(id:string){
+        return await this.friendsService.getFriends(id);
     }
 }

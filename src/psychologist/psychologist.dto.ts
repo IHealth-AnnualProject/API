@@ -14,6 +14,19 @@ export class PsychologistDTO {
     user;
 }
 
+export class PsychologistDTOID {
+    id :string;
+    first_name: string;
+
+    last_name: string;
+
+    age: number;
+
+    geolocation:string;
+
+    user;
+}
+
 export class PsychologistRO{
     id:string;
 

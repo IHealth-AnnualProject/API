@@ -6,6 +6,26 @@ import {UserRO} from "../user/user.dto";
 import {UserEntity} from "../user/user.entity";
 
 
+export class UserProfileDTOID {
+    id:string;
+    @ApiPropertyOptional()
+    first_name: string;
+    @ApiPropertyOptional()
+    last_name: string;
+    @ApiPropertyOptional()
+    age: number;
+    @ApiPropertyOptional()
+    geolocation:string;
+    @ApiPropertyOptional()
+    description: string;
+
+    email:string;
+
+    moralStats:[MoralStatsDTO];
+
+    user;
+}
+
 export class UserProfileDTO {
     @ApiPropertyOptional()
     first_name: string;

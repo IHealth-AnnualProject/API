@@ -4,14 +4,13 @@ import { AuthService } from './auth.service';
 import {UserService} from "../user/user.service";
 import {UserAndTokenResponse, UserDTO} from "../user/user.dto";
 import {ApiCreatedResponse} from "@nestjs/swagger";
-import {UserProfileDTO} from "../userProfile/userProfile.dto";
+import {UserProfileDTO, UserProfileDTOID} from "../userProfile/userProfile.dto";
 import {UserLogin} from "./auth.validation";
 import {JwtAuthGuard} from "./jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
 import { TokenValidResponse} from "./auth.response";
 import {UserProfileService} from "../userProfile/userProfile.service";
 import {PsychologistService} from "../psychologist/psychologist.service";
-
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -29,17 +28,13 @@ export class AuthController {
     async login(@Body() userLogin: UserLogin) {
         const user = await this.userService.login(userLogin);
         const token = await this.authService.login(user);
-        console.log(user.id);
-        let profile;
         if(user.isPsy) {
-            profile = await this.psychologistService.findByUserId(user.id);
+            await this.psychologistService.findByUserId(user.id);
         }else{
-            profile = await this.userProfileService.findByUserId(user.id);
+            await this.userProfileService.findByUserId(user.id);
         }
 
-        let profileId:string = profile.id;
-
-        return {profileId, user, token };
+        return {user, token };
     }
 
 
@@ -49,13 +44,13 @@ export class AuthController {
             throw new HttpException('Missing argument password or username', HttpStatus.BAD_REQUEST);
         }
         let user = await this.userService.register(userDTO);
-        let userProfileDto:UserProfileDTO =new UserProfileDTO();
+        let userProfileDto:UserProfileDTOID =new UserProfileDTOID();
         userProfileDto.user=user.id;
+        userProfileDto.id =user.id;
         if(!user.isPsy){
-            this.userProfileService.create(userProfileDto);
-            return;
+            return await this.userProfileService.create(userProfileDto);
         }
-        this.psychologistService.create(userProfileDto);
+        return await this.psychologistService.create(userProfileDto);
 
     }
 

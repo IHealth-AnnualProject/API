@@ -1,16 +1,17 @@
 
 import {
-    BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne,
+    BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn,
     PrimaryGeneratedColumn
 } from "typeorm";
 import {MoralStatsEntity} from "../moral_stats/moralStats.entity";
 import {UserEntity} from "../user/user.entity";
 import {IsDefined} from "class-validator";
 import {UserProfileRO} from "./userProfile.dto";
+import {FriendsEntity} from "../friends/friends.entity";
 
 @Entity('user_profile')
 export class UserProfileEntity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn('uuid')
     id: string;
 
     //email retirer first_name last_name
@@ -25,6 +26,7 @@ export class UserProfileEntity {
 
     @OneToMany(type => MoralStatsEntity, moral => moral.userProfile)
     moral: MoralStatsEntity[];
+
 
     @OneToOne(type => UserEntity)
     @JoinColumn()

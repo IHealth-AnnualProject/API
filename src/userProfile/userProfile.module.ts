@@ -11,11 +11,12 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {AuthModule} from "../auth/auth.module";
 import {UserProfileEntity} from "./userProfile.entity";
 import {MoralStatsModule} from "../moral_stats/moralStats.module";
+import {FriendsModule} from "../friends/friends.module";
 
 
 @Module({
     imports: [TypeOrmModule.forFeature([UserProfileEntity])
-    ,MoralStatsModule],
+    ,MoralStatsModule,FriendsModule],
     providers: [UserProfileService],
     controllers:[UserProfileController],
     exports: [UserProfileService],

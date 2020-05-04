@@ -6,7 +6,7 @@ import {MoralStatsDTO} from "./moralStats.dto";
 import {UserProfileDTO} from "../userProfile/userProfile.dto";
 import {UserProfileEntity} from "../userProfile/userProfile.entity";
 
-
+//TODO IL SE PEUT QUI IL EST UN PROBLEME DANS LES RELATIONS
 @Injectable()
 export class MoralStatsService {
     constructor(@InjectRepository(MoralStatsEntity)
@@ -32,6 +32,5 @@ export class MoralStatsService {
         }
         return res;
     }
-
 
 }

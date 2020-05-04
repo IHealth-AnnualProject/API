@@ -7,12 +7,14 @@ import { UserDTO } from './user.dto';
 import {UserLogin} from "../auth/auth.validation";
 import {UserProfileService} from "../userProfile/userProfile.service";
 import {UserProfileDTO} from "../userProfile/userProfile.dto";
+import {FriendsService} from "../friends/friends.service";
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(UserEntity)
-        private userRepository: Repository<UserEntity>
+        private userRepository: Repository<UserEntity>,
+        private friendsService:FriendsService,
     ) {}
 
     async login(data: UserLogin) {
@@ -27,6 +29,7 @@ export class UserService {
         return user.toResponseObject();
     }
 
+
     async register(data: UserDTO) {
         // TODOOO CREER LE PROFILE ICI
         const { username } = data;
@@ -36,17 +39,17 @@ export class UserService {
         }
         user = await this.userRepository.create(data);
         await this.userRepository.save(user);
-        /*
-        if(!user.isPsy){
-            let userProfileDto:UserProfileDTO;
-            userProfileDto.user=user.id;
-            this.userProfileService.create(userProfileDto);
-        }*/
         return user ;
     }
 
     async findOne(username: string): Promise<UserEntity | undefined> {
         return await this.userRepository.findOne({ where: { username } });
+    }
+
+    async addFriend(userId:string,friendId:string){
+        let me = await this.userRepository.findOne({where:{id:userId}});
+        let friend = await this.userRepository.findOne({where:{id:friendId}});
+        await this.friendsService.addFriend(me,friend);
     }
 
 }
