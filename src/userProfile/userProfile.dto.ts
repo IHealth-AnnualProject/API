@@ -28,6 +28,8 @@ export class UserProfileDTO {
     description: string;
     @ApiPropertyOptional()
     email:string;
+    @ApiPropertyOptional()
+    birthdate:Date;
 
     moralStats:[MoralStatsDTO];
 
@@ -43,4 +45,6 @@ export class UserProfileRO{
     description:string;
     @ApiPropertyOptional()
     user:UserRO
+    @ApiPropertyOptional()
+    birthdate:Date;
 }

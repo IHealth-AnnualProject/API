@@ -81,7 +81,8 @@ describe("UserProfile route", ()=>{
                     created: creationDate,
                     username: 'pabla',
                     isPsy: false
-                }
+                },
+                birthdate: '0000-00-00'
             });
     });
 
@@ -97,7 +98,8 @@ describe("UserProfile route", ()=>{
                      created: creationDate,
                      username: 'pabla',
                      isPsy: false
-                 }
+                 },
+             birthdate: '0000-00-00'
             });
     });
 

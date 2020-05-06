@@ -34,11 +34,14 @@ export class UserProfileEntity {
     })
     description: string;
 
+    @Column('date')
+    birthdate:Date;
+
     toResponseObject(): UserProfileRO {
         let user:any = this.user;
         if(user instanceof UserEntity ){
             user=user.toResponseObject();
         }
-        return {id:this.id,email:this.email,description:this.description,user:user};
+        return {id:this.id,email:this.email,description:this.description,user:user,birthdate:this.birthdate};
     }
 }

@@ -1,13 +1,14 @@
-import { IsNotEmpty } from 'class-validator';
-import {Column, PrimaryGeneratedColumn} from "typeorm";
 
 
 export class PsychologistDTO {
+
     first_name: string;
 
     last_name: string;
+    email:string;
+    username:string;
 
-    age: number;
+    birthdate: string;
 
     geolocation:string;
 
@@ -20,7 +21,10 @@ export class PsychologistDTOID {
 
     last_name: string;
 
-    age: number;
+    email:string;
+    username:string;
+
+    birthdate: Date;
 
     geolocation:string;
 
@@ -30,11 +34,13 @@ export class PsychologistDTOID {
 export class PsychologistRO{
     id:string;
 
+    email:string;
+    username:string;
     first_name: string;
 
     last_name: string;
 
-    age: number;
+    birthdate: Date;
 
     description:string;
 }
