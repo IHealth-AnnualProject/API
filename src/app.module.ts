@@ -8,11 +8,13 @@ import {AppController} from "./app.controller";
 import {UserProfileModule} from "./userProfile/userProfile.module";
 import {PsychologistModule} from "./psychologist/psychologist.module";
 import {FriendRequestModule} from "./friendRequest/friendRequest.module";
+import {JwtStrategy} from "./auth/jwt.strategy";
+import {GatewayModule} from "./gateway/gateway.module";
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), AuthModule, UserModule,UserProfileModule,PsychologistModule,FriendRequestModule],
+  imports: [TypeOrmModule.forRoot(), AuthModule, UserModule,UserProfileModule,PsychologistModule,FriendRequestModule,GatewayModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,JwtStrategy],
 })
 export class AppModule {}

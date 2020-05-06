@@ -46,6 +46,10 @@ export class UserService {
         return await this.userRepository.findOne({ where: { username } });
     }
 
+    async findOneById(id: string): Promise<UserEntity | undefined> {
+        return await this.userRepository.findOne({ where: { id } });
+    }
+
     async addFriend(userId:string,friendId:string){
         let me = await this.userRepository.findOne({where:{id:userId}});
         let friend = await this.userRepository.findOne({where:{id:friendId}});

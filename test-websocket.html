@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+
+</head>
+<body>
+<div>
+<input id="username"/>
+<input id="password"/>
+    <button onclick="connect()">connect</button>
+    <button onclick="register()">register</button>
+</div>
+<div>
+    message<input id="message"/>
+    user<input id="user">
+    <button onclick="sendMessage()">sendmessage</button>
+</div>
+
+<ul id="app"></ul>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script>
+    let token ;
+    const socket = io('http://localhost:4001');
+    socket.on('connection',data=>console.log(data));
+    socket.on('newMessage',data=>console.log(data));
+    socket.on('join',data=>console.log(data));
+    function connect() {
+        var myInit = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value
+            })
+        };
+        fetch('http://127.0.0.1:3000/auth/login', myInit)
+            .then(async function (response) {
+                token = await  response.json();
+                token = token.token.access_token;
+                console.log(token);
+                socket.emit('sub',{token:token});
+            });
+    }
+
+    function sendMessage(){
+
+        let message ={ token:token, data:{content: document.getElementById("message").value,idReceiver:document.getElementById("user").value}};
+        console.log(message);
+        socket.emit('sendMessage',message);
+        console.log("messaggesend")
+    }
+
+    function register(){
+        var myInit = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                isPsy:true,
+            })
+        };
+        fetch('http://127.0.0.1:3000/auth/register', myInit)
+            .then(async function (response) {
+                console.log(response)
+            });
+
+    }
+</script>
+</body>
+</html>
