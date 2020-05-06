@@ -11,11 +11,20 @@ export class PsychologistEntity {
     @PrimaryColumn('uuid')
     id: string;
 
-    @Column('text')
+    @Column('text',{
+        default: ''
+    })
     first_name: string;
 
-    @Column('text')
+    @Column('text',{
+        default: ''
+    })
     last_name: string;
+
+    @Column('text',{
+        default: ''
+    })
+    email;
 
     @Column('text')
     age: number;

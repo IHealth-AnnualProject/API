@@ -9,16 +9,10 @@ import {UserEntity} from "../user/user.entity";
 export class UserProfileDTOID {
     id:string;
     @ApiPropertyOptional()
-    first_name: string;
-    @ApiPropertyOptional()
-    last_name: string;
-    @ApiPropertyOptional()
-    age: number;
-    @ApiPropertyOptional()
     geolocation:string;
     @ApiPropertyOptional()
     description: string;
-
+    @ApiPropertyOptional()
     email:string;
 
     moralStats:[MoralStatsDTO];
@@ -27,17 +21,12 @@ export class UserProfileDTOID {
 }
 
 export class UserProfileDTO {
-    @ApiPropertyOptional()
-    first_name: string;
-    @ApiPropertyOptional()
-    last_name: string;
-    @ApiPropertyOptional()
-    age: number;
+
     @ApiPropertyOptional()
     geolocation:string;
     @ApiPropertyOptional()
     description: string;
-
+    @ApiPropertyOptional()
     email:string;
 
     moralStats:[MoralStatsDTO];
@@ -49,11 +38,7 @@ export class UserProfileRO{
     @ApiPropertyOptional()
     id:string;
     @ApiPropertyOptional()
-    first_name: string;
-    @ApiPropertyOptional()
-    last_name: string;
-    @ApiPropertyOptional()
-    age: number;
+    email: string;
     @ApiPropertyOptional()
     description:string;
     @ApiPropertyOptional()

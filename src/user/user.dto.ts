@@ -38,6 +38,4 @@ export class UserAndTokenResponse {
     user:UserRO;
     @ApiProperty()
     token:Token;
-    @ApiProperty()
-    profileId:string;
 }

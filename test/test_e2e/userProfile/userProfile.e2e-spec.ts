@@ -16,6 +16,7 @@ let token;
 let id;
 let userId;
 let creationDate;
+let email;
 describe("UserProfile route", ()=>{
     beforeAll(async()=> {
         const module = await
@@ -52,11 +53,9 @@ describe("UserProfile route", ()=>{
     it('/ (PATCH) Modify userProfile should return 200', () => {
         return request(app.getHttpServer())
             .patch('/userProfile').set('Authorization', 'Bearer ' + token).send({
-                first_name: "pablo",
-                last_name: "lastname",
-                age: 12,
                 geolocation: null,
-                description: "description"
+                description: "description",
+                email:'unemail'
             })
             .expect(204)
     });
@@ -65,9 +64,9 @@ describe("UserProfile route", ()=>{
         let result = await request(app.getHttpServer())
             .get('/userProfile').set('Authorization', 'Bearer ' + token)
             .expect(200);
-        expect(result.body[0].first_name).toBe('pablo');
         id = result.body[0].id;
         creationDate = result.body[0].user.created
+        email = result.body[0].email;
     });
 
     it('/ (Get) Get userProfile/id/user return 200', async () => {
@@ -75,10 +74,8 @@ describe("UserProfile route", ()=>{
             .get('/userProfile/'+userId+'/user').set('Authorization', 'Bearer ' + token)
             .expect(200).expect({
                 id: id,
-                first_name: 'pablo',
-                last_name: 'lastname',
-                age: '12',
                 description: 'description',
+                email:email,
                 user: {
                     id: userId,
                     created: creationDate,
@@ -93,10 +90,8 @@ describe("UserProfile route", ()=>{
             .get('/userProfile/'+id).set('Authorization', 'Bearer ' + token)
             .expect(200).expect({
                 id: id,
-                first_name: 'pablo',
-                last_name: 'lastname',
-                age: '12',
                 description: 'description',
+                email:email,
                 user: {
                      id: userId,
                      created: creationDate,

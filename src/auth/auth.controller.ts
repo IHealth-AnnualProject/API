@@ -11,6 +11,7 @@ import {User} from "../decorator/user.decorator";
 import { TokenValidResponse} from "./auth.response";
 import {UserProfileService} from "../userProfile/userProfile.service";
 import {PsychologistService} from "../psychologist/psychologist.service";
+import {PsychologistDTOID} from "../psychologist/psychologist.dto";
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -44,13 +45,19 @@ export class AuthController {
             throw new HttpException('Missing argument password or username', HttpStatus.BAD_REQUEST);
         }
         let user = await this.userService.register(userDTO);
-        let userProfileDto:UserProfileDTOID =new UserProfileDTOID();
-        userProfileDto.user=user.id;
-        userProfileDto.id =user.id;
+
         if(!user.isPsy){
+            let userProfileDto:UserProfileDTOID =new UserProfileDTOID();
+            userProfileDto.user=user.id;
+            userProfileDto.id =user.id;
             return await this.userProfileService.create(userProfileDto);
         }
-        return await this.psychologistService.create(userProfileDto);
+        let psychoID:PsychologistDTOID =new PsychologistDTOID();
+        psychoID.user=user.id;
+        psychoID.id =user.id;
+        psychoID.first_name ="";
+        psychoID.last_name ="";
+        return await this.psychologistService.create(psychoID);
 
     }
 

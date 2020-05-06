@@ -14,19 +14,13 @@ export class UserProfileEntity {
     @PrimaryColumn('uuid')
     id: string;
 
-    //email retirer first_name last_name
-    @Column('text')
-    first_name: string;
-
-    @Column('text')
-    last_name: string;
-
-    @Column('text')
-    age: number;
+    @Column('text',{
+        default: ''
+    })
+    email: string;
 
     @OneToMany(type => MoralStatsEntity, moral => moral.userProfile)
     moral: MoralStatsEntity[];
-
 
     @OneToOne(type => UserEntity)
     @JoinColumn()
@@ -35,7 +29,9 @@ export class UserProfileEntity {
     @Column("geometry",{nullable :true})
     geolocation:string;
 
-    @Column('text')
+    @Column('text',{
+        default: ''
+    })
     description: string;
 
     toResponseObject(): UserProfileRO {
@@ -43,6 +39,6 @@ export class UserProfileEntity {
         if(user instanceof UserEntity ){
             user=user.toResponseObject();
         }
-        return {id:this.id,first_name:this.first_name,last_name:this.last_name,age:this.age,description:this.description,user:user};
+        return {id:this.id,email:this.email,description:this.description,user:user};
     }
 }
