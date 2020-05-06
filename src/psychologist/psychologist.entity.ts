@@ -11,12 +11,6 @@ export class PsychologistEntity {
     @PrimaryColumn('uuid')
     id: string;
 
-
-    @Column('text',{
-        default: ''
-    })
-    username: string;
-
     @Column('text',{
         default: ''
     })
@@ -46,6 +40,6 @@ export class PsychologistEntity {
     description: string;
 
     toResponseObject(): PsychologistRO {
-        return {first_name:this.first_name,last_name:this.last_name,birthdate:this.birthdate,description:this.description,id:this.id,email:this.email,username:this.username};
+        return {first_name:this.first_name,last_name:this.last_name,birthdate:this.birthdate,description:this.description,id:this.id,email:this.email};
     }
 }

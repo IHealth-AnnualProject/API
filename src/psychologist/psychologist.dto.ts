@@ -22,7 +22,6 @@ export class PsychologistDTOID {
     last_name: string;
 
     email:string;
-    username:string;
 
     birthdate: Date;
 
@@ -35,7 +34,6 @@ export class PsychologistRO{
     id:string;
 
     email:string;
-    username:string;
     first_name: string;
 
     last_name: string;

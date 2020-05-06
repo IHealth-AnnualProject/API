@@ -19,7 +19,7 @@ export class PsychologistService {
 
 
     async read(id:number){
-        let user = await this.userProfileEntityRepository.findOne({where:{id:id}});
+        let user = await this.userProfileEntityRepository.findOne({where:{id:id}, relations: ["user"]});
         if(!user){
             throw new HttpException('profile not found', HttpStatus.NOT_FOUND);
         }
@@ -47,7 +47,7 @@ export class PsychologistService {
     }
 
     async findAll(){
-         let users = await this.userProfileEntityRepository.find();
+         let users = await this.userProfileEntityRepository.find({ relations: ["user"]});
          users.forEach(function(part, index) {
                 this[index] = part.toResponseObject();
             }, users);
