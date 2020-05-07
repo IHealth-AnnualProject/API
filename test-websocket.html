@@ -25,7 +25,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 <script>
     let token ;
-    const socket = io('http://localhost:4001');
+    //let webs= new WebSocket("wss://127.0.0.1:6379");
+    const socket = io('wss://127.0.0.1:6379');
     socket.on('connection',data=>console.log(data));
     socket.on('newMessage',data=>console.log(data));
     socket.on('join',data=>console.log(data));
@@ -41,7 +42,7 @@
                 password: document.getElementById("password").value
             })
         };
-        fetch('http://127.0.0.1:3000/auth/login', myInit)
+        fetch('http://51.255.169.122:3000/auth/login', myInit)
             .then(async function (response) {
                 token = await  response.json();
                 token = token.token.access_token;
@@ -71,7 +72,7 @@
                 isPsy:true,
             })
         };
-        fetch('http://127.0.0.1:3000/auth/register', myInit)
+        fetch('http://51.255.169.122:3000/auth/register', myInit)
             .then(async function (response) {
                 console.log(response)
             });

@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import {Logger, ValidationPipe} from "@nestjs/common";
 import {AppModule} from "./app.module";
+import {RedisIoAdapter} from "./shared/redis.adapter";
 
 const port = process.env.APP_PORT || 8080;
 
@@ -15,8 +16,10 @@ async function bootstrap() {
       .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
+  app.useWebSocketAdapter(new RedisIoAdapter(app));
   app.enableCors();
   await app.listen(port);
+
   Logger.log("Serveur started on port" +port);
 }
 bootstrap();
