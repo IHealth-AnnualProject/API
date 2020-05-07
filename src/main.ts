@@ -16,7 +16,6 @@ async function bootstrap() {
       .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
-  app.useWebSocketAdapter(new RedisIoAdapter(app));
   app.enableCors();
   await app.listen(port);
 

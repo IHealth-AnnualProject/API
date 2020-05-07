@@ -17,7 +17,8 @@ import {UserService} from "../user/user.service";
 
 @WebSocketGateway(4001, { transport: ['websocket'] })
 export class GatewayService implements OnGatewayConnection, OnGatewayDisconnect {
-    constructor(private messageService:MessageService,private userService:UserService) {}
+    constructor(private messageService:MessageService,private userService:UserService) {
+    }
 
     @WebSocketServer()
     wss: Server;
@@ -49,9 +50,8 @@ export class GatewayService implements OnGatewayConnection, OnGatewayDisconnect 
         if(receiver){
             this.logger.log('sendMessage');
             let messageDTO:MessageDTO = this._messageToMessageDTO(message,user);
-            console.log(message);
             await this.messageService.create(messageDTO);
-            this.wss.to(message.idReceiver).emit('newMessage',{content:message.content,senderId:user.id,senderUsername:user.username});
+            this.wss.to(message.idReceiver).emit('newMessage',{message: messageDTO, senderUsername:user.username});
         }
 
     }
