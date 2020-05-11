@@ -15,10 +15,8 @@ export class WsJwtGuard implements CanActivate {
     //TODO LE TOKEN EST PASSER EN CLAIR FAUT TROUVERU NE SOLUTION
     async canActivate(context: ExecutionContext) {
         try {
-            console.log(context.getArgs()[1]);
             const authToken = context.getArgs()[1].token;
             const jwtPayload = jwt.verify(authToken, jwtConstants.secret);
-            console.log(jwtPayload);
             const user = this.jwtStrategy.validate(authToken);
             //context.switchToWs().getData().user = user;
         }catch(e){

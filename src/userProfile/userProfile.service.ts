@@ -21,6 +21,10 @@ export class UserProfileService {
     ) {}
 
     async getMoralStats(userProfileId:string){
+        let user = await this.userProfileEntityRepository.findOne({where:{id:userProfileId}});
+        if(!user){
+            throw new HttpException('profile not found', HttpStatus.NOT_FOUND);
+        }
         return await this.moralStatsService.getMoralStats(userProfileId);
     }
 
