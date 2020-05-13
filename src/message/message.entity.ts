@@ -1,6 +1,8 @@
 import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {UserEntity} from "../user/user.entity";
-import {ApiPropertyOptional} from "@nestjs/swagger";
+import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
+import {UserRO} from "../user/user.dto";
+import {UserProfileRO} from "../userProfile/userProfile.dto";
 
 
 @Entity('message')
@@ -22,18 +24,31 @@ export class MessageEntity {
     @ManyToOne(type => UserEntity)
     @JoinColumn()
     to: UserEntity;
+
+    toResponseObject(): MessageEntityRO {
+        let to:any = this.to;
+        if(to instanceof UserEntity ){
+            to=to.toResponseObject();
+        }
+
+        let from:any = this.from;
+        if(from instanceof UserEntity ){
+            from=from.toResponseObject();
+        }
+        return {id:this.id,from:from,to:to,textMessage:this.textMessage,created:this.created};
+    }
 }
 
 export class MessageEntityRO{
-    @ApiPropertyOptional()
+    @ApiProperty()
     id: string;
-
-    @ApiPropertyOptional()
+    @ApiProperty()
     created: Date;
-    @ApiPropertyOptional()
+    @ApiProperty()
     textMessage:string;
-    @ApiPropertyOptional()
-    from: string;
-    @ApiPropertyOptional()
-    to: string;
+    @ApiProperty()
+    from: UserRO;
+    @ApiProperty()
+    to: UserRO;
 }
+

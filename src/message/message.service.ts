@@ -34,6 +34,11 @@ export class MessageService {
                 }
 
     async getConversationMessage(me: string,user:string) {
-        return await this.messageEntityRepository.find({where:[{to:me,from:user,state:FriendRequestState.ACCEPT},{to:user,from:me,state:FriendRequestState.ACCEPT}],order:{created:"ASC"}});
+        let messages:MessageEntity[] =  await this.messageEntityRepository.find({where:[{to:me,from:user,state:FriendRequestState.ACCEPT},
+                {to:user,from:me,state:FriendRequestState.ACCEPT}],relations:["from","to"],order:{created:"ASC"}});
+        messages.forEach(function(part, index) {
+            this[index] = part.toResponseObject();
+        }, messages);
+        return messages;
     }
 }
