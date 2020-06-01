@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import {Logger, ValidationPipe} from "@nestjs/common";
 import {AppModule} from "./app.module";
-import {RedisIoAdapter} from "./shared/redis.adapter";
 
 const port = process.env.APP_PORT || 8080;
 
