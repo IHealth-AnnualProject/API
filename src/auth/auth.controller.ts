@@ -35,7 +35,7 @@ export class AuthController {
             await this.userProfileService.findByUserId(user.id);
         }
 
-        return {user, token };
+        return {user, token};
     }
 
 

@@ -80,7 +80,8 @@ describe("UserProfile route", ()=>{
                     id: userId,
                     created: creationDate,
                     username: 'pabla',
-                    isPsy: false
+                    isPsy: false, xp:0
+
                 },
                 birthdate: '0000-00-00'
             });
@@ -97,7 +98,8 @@ describe("UserProfile route", ()=>{
                      id: userId,
                      created: creationDate,
                      username: 'pabla',
-                     isPsy: false
+                     isPsy: false,
+                     xp:0
                  },
              birthdate: '0000-00-00'
             });

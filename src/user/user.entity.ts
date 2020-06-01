@@ -28,6 +28,11 @@ export class UserEntity {
     @Column('boolean')
     isPsy: boolean;
 
+    @Column('int',{
+        default:0
+    })
+    xp:number;
+
     @BeforeInsert()
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);
@@ -38,7 +43,7 @@ export class UserEntity {
     }
 
     toResponseObject(): UserRO {
-        return {id:this.id,created:this.created,username:this.username,isPsy:this.isPsy};
+        return {id:this.id,created:this.created,username:this.username,isPsy:this.isPsy,xp:this.xp};
     }
 
     }

@@ -27,6 +27,8 @@ export class UserRO {
     created: Date;
     @ApiProperty()
     isPsy:boolean;
+    @ApiProperty()
+    xp:number;
 }
 
 export class Token {

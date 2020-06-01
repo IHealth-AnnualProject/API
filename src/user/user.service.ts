@@ -56,4 +56,14 @@ export class UserService {
         await this.friendsService.addFriend(me,friend);
     }
 
+    async addXP(userId:string,xp:number){
+        let user = await this.userRepository.findOne({where:{id:userId}});
+        if(!user){
+            throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+        }
+        user.xp =user.xp+xp;
+        await this.userRepository.update(user.id, user);
+        return;
+    }
+
 }
