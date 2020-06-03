@@ -77,10 +77,33 @@ describe("Music route", ()=>{
             .get('/music/').set('Authorization', 'Bearer ' + token)
             .expect(200);
         expect(res.body.length).toBe(1);
+        id = res.body[0].id;
+    });
+
+    it('/ (Post) Get musics file', (done) => {
+            return request(app.getHttpServer())
+            .get('/music/'+id).set('Authorization', 'Bearer ' + token)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+                //console.log(res);
+                return done();
+            });
+    });
+
+
+    it('/ (Delete) Delete musics', async () => {
+        await  request(app.getHttpServer())
+            .delete('/music/'+id).set('Authorization', 'Bearer ' + token)
+            .expect(200);
+        let res = await  request(app.getHttpServer())
+            .get('/music/').set('Authorization', 'Bearer ' + token)
+            .expect(200);
+        return expect(res.body.length).toBe(0);
     });
 
     afterAll(async () => {
-        clear_file();
         await repository.query('DELETE FROM music;');
         await repository.query('DELETE FROM user_profile;');
         await repository.query('DELETE FROM psychologist;');

@@ -1,7 +1,7 @@
 import {MusicService} from "./music.service";
 import {ApiCreatedResponse, ApiTags} from "@nestjs/swagger";
 import {
-    Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, UploadedFile, UseGuards,
+    Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Res, UploadedFile, UseGuards,
     UseInterceptors
 } from "@nestjs/common";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
@@ -12,6 +12,7 @@ import {QuestCreation} from "../quest/quest.validation";
 import { diskStorage } from  'multer';
 import { extname } from "path";
 import {PsychologistDTO} from "../psychologist/psychologist.dto";
+import {MusicEntity} from "./music.entity";
 let fs = require('fs');
 const FileType = require('file-type');
 
@@ -45,6 +46,15 @@ export class MusicController {
         return await this.musicService.findAll();
     }
 
+
+    @Get(':musicId')
+    @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({})
+    async download(@Param('musicId') fileId, @Res() res) {
+        let music:MusicEntity = await this.musicService.findById(fileId);
+        res.sendFile(music.filename, { root: './'});
+    }
+
     @Post('')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(localStorageFileInterceptor('file'))
@@ -66,12 +76,15 @@ export class MusicController {
         }
     }
 
-    @Delete('')
+    @Delete(':musicId')
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({
     })
-    async delete(@Param() param,@User() user,) {
-        return await this.musicService.delete(param.id);
+    async delete(@Param('musicId') musicId,@User() user,) {
+        console.log("delete");
+        let music:MusicEntity = await this.musicService.findById(musicId);
+        await this.musicService.delete(musicId);
+        fs.unlinkSync(music.filename);
     }
 
     async checkIfMp3(file){
@@ -82,4 +95,5 @@ export class MusicController {
             let count = (filetype.mime.match(/audio/g) || []).length;
             return count => 1;
     }
+
 }

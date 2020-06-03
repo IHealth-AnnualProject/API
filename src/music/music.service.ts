@@ -34,8 +34,8 @@ export class MusicService {
         return musics;
     }
 
-    async delete(id) {
-
+    async delete(musicId) {
+        return await this.musicEntityRepository.delete(musicId);
     }
 
 
