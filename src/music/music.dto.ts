@@ -8,6 +8,8 @@ export class MusicRO {
     name:string;
     @ApiPropertyOptional()
     duration:number;
+    @ApiPropertyOptional()
+    linkDownload:string;
 
 }
 

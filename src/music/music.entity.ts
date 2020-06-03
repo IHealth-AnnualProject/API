@@ -17,6 +17,7 @@ export class MusicEntity {
     filename:string;
 
     toResponseObject(): MusicRO {
-        return {id:this.id,name:this.name,duration:this.duration};
+        let linkDownload = process.env.APP_URL+":"+process.env.APP_PORT+'/music/'+this.id+'/download';
+        return {id:this.id,name:this.name,duration:this.duration,linkDownload: linkDownload};
     }
 }

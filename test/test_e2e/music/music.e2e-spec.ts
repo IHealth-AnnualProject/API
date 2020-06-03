@@ -3,7 +3,7 @@ import {Test} from "@nestjs/testing";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {AuthModule} from "../../../src/auth/auth.module";
 import {INestApplication, ValidationPipe} from "@nestjs/common";
-jest.setTimeout(25000);
+jest.setTimeout(30000);
 import * as request from 'supertest';
 import {Repository} from "typeorm";
 import {Difficulty, QuestEntity} from "../../../src/quest/quest.entity";
@@ -50,15 +50,6 @@ describe("Music route", ()=>{
         userId = result.body.user.id;
     });
 
-    /*
-    it('/ (Get) get quests', async () => {
-        let quest:QuestCreation= {name:"A quest",description:"faut faire ca ",difficulty:Difficulty.EASY};
-        let result =  await  request(app.getHttpServer())
-            .get('/quest').set('Authorization', 'Bearer ' + token);
-        expect(result.body.length).toBe(1);
-        id = result.body[0].id
-    });*/
-
     it('/ (Post) post music', async () => {
         return await  request(app.getHttpServer())
             .post('/music/').set('Authorization', 'Bearer ' + token).field('name', 'davidgeto')
@@ -80,14 +71,24 @@ describe("Music route", ()=>{
         id = res.body[0].id;
     });
 
+    it('/ (Post) Get music',  () => {
+        return  request(app.getHttpServer())
+            .get('/music/'+id).set('Authorization', 'Bearer ' + token)
+            .expect(200).expect({
+                id: id,
+                name: 'davidgeto',
+                duration: 45,
+                linkDownload : process.env.APP_URL+":"+process.env.APP_PORT+'/music/'+id+'/download'
+            });
+    });
+
     it('/ (Post) Get musics file', (done) => {
             return request(app.getHttpServer())
-            .get('/music/'+id).set('Authorization', 'Bearer ' + token)
+            .get('/music/'+id+'/download').set('Authorization', 'Bearer ' + token)
             .end(function(err, res) {
                 if (err) {
                     return done(err);
                 }
-                //console.log(res);
                 return done();
             });
     });
@@ -118,7 +119,6 @@ describe("Music route", ()=>{
             }
 
             files.forEach(function (file) {
-                // Do whatever you want to do with the file
                 fs.unlinkSync('./song/'+file);
             });
         })

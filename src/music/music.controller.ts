@@ -47,12 +47,20 @@ export class MusicController {
     }
 
 
-    @Get(':musicId')
+    @Get(':musicId/download')
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async download(@Param('musicId') fileId, @Res() res) {
         let music:MusicEntity = await this.musicService.findById(fileId);
         res.sendFile(music.filename, { root: './'});
+    }
+
+    @Get(':musicId')
+    @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({})
+    async findById(@Param('musicId') fileId) {
+        let music:MusicEntity = await this.musicService.findById(fileId);
+        return music.toResponseObject();
     }
 
     @Post('')
