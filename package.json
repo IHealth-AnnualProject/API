@@ -35,6 +35,8 @@
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
     "dotenv": "^8.2.0",
+    "file-type": "^14.6.0",
+    "get-audio-duration": "^2.0.2-beta.0",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",

@@ -4,6 +4,7 @@ import {Body, Controller, Delete, Get, Param, Post, UseGuards} from "@nestjs/com
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
 import {QuestCreation} from "./quest.validation";
+import {QuestRO} from "./quest.dto";
 
 @Controller('quest')
 @ApiTags('quest')
@@ -12,6 +13,7 @@ export class QuestController {
 
     @Get('')
     @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({type:[QuestRO]})
     async read() {
         return await this.questService.findAll();
     }
@@ -27,6 +29,8 @@ export class QuestController {
 
     @Get('done')
     @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({
+    })
     async questDone(@User() user) {
         return await this.questService.questDone(user.userId);
     }

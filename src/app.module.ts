@@ -10,10 +10,12 @@ import {PsychologistModule} from "./psychologist/psychologist.module";
 import {FriendRequestModule} from "./friendRequest/friendRequest.module";
 import {JwtStrategy} from "./auth/jwt.strategy";
 import {GatewayModule} from "./gateway/gateway.module";
+import {QuestModule} from "./quest/quest.module";
+import {MusicModule} from "./music/music.module";
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), AuthModule, UserModule,UserProfileModule,PsychologistModule,FriendRequestModule,GatewayModule],
+  imports: [TypeOrmModule.forRoot(), AuthModule, UserModule,UserProfileModule,PsychologistModule,FriendRequestModule,GatewayModule,QuestModule,MusicModule],
   controllers: [AppController],
   providers: [AppService,JwtStrategy],
 })
