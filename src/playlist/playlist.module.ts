@@ -1,7 +1,7 @@
 
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {Module} from "@nestjs/common";
-import {PlaylistEntity} from "./Playlist.entity";
+import {PlaylistEntity} from "./playlist.entity";
 import {AuthModule} from "../auth/auth.module";
 import {UserModule} from "../user/user.module";
 import {PlaylistService} from "./playlist.service";
