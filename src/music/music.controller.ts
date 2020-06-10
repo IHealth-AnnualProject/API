@@ -57,7 +57,7 @@ export class MusicController {
 
     @Get(':musicId')
     @UseGuards(JwtAuthGuard)
-    @ApiCreatedResponse({})
+    @ApiCreatedResponse({ type: MusicRO})
     async findById(@Param('musicId') fileId) {
         let music:MusicEntity = await this.musicService.findById(fileId);
         return music.toResponseObject();

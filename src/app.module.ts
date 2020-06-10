@@ -12,10 +12,11 @@ import {JwtStrategy} from "./auth/jwt.strategy";
 import {GatewayModule} from "./gateway/gateway.module";
 import {QuestModule} from "./quest/quest.module";
 import {MusicModule} from "./music/music.module";
+import {PlaylistModule} from "./playlist/playlist.module";
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), AuthModule, UserModule,UserProfileModule,PsychologistModule,FriendRequestModule,GatewayModule,QuestModule,MusicModule],
+  imports: [TypeOrmModule.forRoot(), AuthModule, UserModule,UserProfileModule,PsychologistModule,FriendRequestModule,GatewayModule,QuestModule,MusicModule,PlaylistModule],
   controllers: [AppController],
   providers: [AppService,JwtStrategy],
 })
