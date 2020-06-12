@@ -3,7 +3,7 @@ import {Test} from "@nestjs/testing";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {AuthModule} from "../../../src/auth/auth.module";
 import {INestApplication, ValidationPipe} from "@nestjs/common";
-jest.setTimeout(30000);
+jest.setTimeout(170000);
 import * as request from 'supertest';
 import {Repository} from "typeorm";
 import {Difficulty, QuestEntity} from "../../../src/quest/quest.entity";
@@ -18,6 +18,7 @@ let app: INestApplication;
 let repository: Repository<QuestEntity>;
 let token;
 let id;
+let idPlaylist;
 let userId;
 let fs = require('fs');
 
@@ -73,7 +74,7 @@ describe("Music route", ()=>{
         id = res.body[0].id;
     });
 
-    it('/ (Post) Get music',  () => {
+    it('/ (Get) Get music',  () => {
         return  request(app.getHttpServer())
             .get('/music/'+id).set('Authorization', 'Bearer ' + token)
             .expect(200).expect({
@@ -96,6 +97,48 @@ describe("Music route", ()=>{
     });
 
 
+    it('/ (Post) Get musics file', (done) => {
+        return request(app.getHttpServer())
+            .get('/music/'+id+'/download').set('Authorization', 'Bearer ' + token)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+                return done();
+            });
+    });
+
+    it('/ (Post) Create playlist musics file', () => {
+        return request(app.getHttpServer())
+            .post('/playlist/').send({name:"playlistchill",musics:[]}).set('Authorization', 'Bearer ' + token)
+            .expect(201)
+    });
+
+
+    it('/ (Post) Get playlist', async () => {
+        let res = await  request(app.getHttpServer())
+            .get('/playlist/').set('Authorization', 'Bearer ' + token)
+            .expect(200);
+        expect(res.body.length).toBe(1);
+        idPlaylist = res.body[0].id;
+        console.log(res.body[0].musics)
+    });
+
+    it('/ (Post) Add music to playlist', () => {
+        return request(app.getHttpServer())
+            .post('/playlist/'+idPlaylist+'/addMusic/'+id).set('Authorization', 'Bearer ' + token)
+            .expect(201)
+    });
+
+    it('/ (Post) GetM playlist', async () => {
+        let res = await  request(app.getHttpServer())
+            .get('/playlist/').set('Authorization', 'Bearer ' + token)
+            .expect(200)
+        expect(res.body[0].musics[0].id).toBe(id);
+    });
+
+
+
     it('/ (Delete) Delete musics', async () => {
         await  request(app.getHttpServer())
             .delete('/music/'+id).set('Authorization', 'Bearer ' + token)
@@ -107,6 +150,7 @@ describe("Music route", ()=>{
     });
 
     afterAll(async () => {
+        await repository.query('DELETE FROM playlist;');
         await repository.query('DELETE FROM music;');
         await repository.query('DELETE FROM user_profile;');
         await repository.query('DELETE FROM psychologist;');

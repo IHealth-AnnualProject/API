@@ -16,11 +16,18 @@ export class PlaylistRO {
 
 export class PlaylistDTO {
     @ApiPropertyOptional()
+    name;
+    @ApiPropertyOptional()
+    musics;
+    @ApiPropertyOptional()
+    user;
+}
+
+export class PlaylistModify {
+    @ApiPropertyOptional()
     name: string;
     @ApiPropertyOptional()
     musics: MusicEntity[];
-    @ApiPropertyOptional()
-    user:UserEntity;
 }
 
 export class PlaylistCreation {

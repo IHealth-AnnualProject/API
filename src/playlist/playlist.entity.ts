@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {MusicRO} from "../music/music.dto";
 import {MusicEntity} from "../music/music.entity";
 import {FriendsEntity} from "../friends/friends.entity";
@@ -15,10 +15,14 @@ export class PlaylistEntity {
     @Column('text')
     name: string;
 
-    @OneToMany(type =>MusicEntity, music => music.id)
+    @ManyToMany(type =>MusicEntity,music=>music.playlist,{
+        cascade: true
+    })
+    @JoinTable()
     musics: MusicEntity[];
 
-    @ManyToOne(type => UserEntity, user => user.id)
+    @ManyToOne(type => UserEntity)
+    @JoinColumn()
     user: UserEntity;
 
 

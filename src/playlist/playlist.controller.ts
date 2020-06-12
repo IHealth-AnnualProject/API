@@ -22,13 +22,20 @@ const { getAudioDurationInSeconds } = require('get-audio-duration');
 @Controller('playlist')
 @ApiTags('playlist')
 export class PlaylistController {
-    constructor(private readonly PlaylistService: PlaylistService) {}
+    constructor(private readonly playlistService: PlaylistService) {}
+    @Post(':playlistId/addMusic/:idMusic')
+    @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({})
+    async addMusic(@Param('playlistId') playlistId,@Param('idMusic') musicId,@User() user) {
+        console.log("heho");
+        return await this.playlistService.addMusic(playlistId,musicId,user.userId);
+    }
 
     @Get(':playlistId')
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({type: PlaylistRO})
     async findById(@Param('playlistId') playlistId) {
-        let Playlist:PlaylistEntity = await this.PlaylistService.findById(playlistId);
+        let Playlist:PlaylistEntity = await this.playlistService.findById(playlistId);
         return Playlist.toResponseObject();
     }
 
@@ -36,15 +43,17 @@ export class PlaylistController {
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({type: [PlaylistRO]})
     async findAll(@User() user) {
-        let playlistRO:PlaylistRO[] = await this.PlaylistService.findAll(user);
-        return playlistRO;
+        return await this.playlistService.findAll(user.userId);
     }
 
     @Post()
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async create(@Body() playlist:PlaylistCreation,@User() user) {
-        return await this.PlaylistService.create(playlist,user.userId);
+        return await this.playlistService.create(playlist,user.userId);
     }
+
+
+
 
 }
