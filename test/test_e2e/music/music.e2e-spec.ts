@@ -13,6 +13,8 @@ import {UserProfileModule} from "../../../src/userProfile/userProfile.module";
 import {PsychologistModule} from "../../../src/psychologist/psychologist.module";
 import {PsychologistRO} from "../../../src/psychologist/psychologist.dto";
 import {MusicModule} from "../../../src/music/music.module";
+import {PlaylistModule} from "../../../src/playlist/playlist.module";
+
 let app: INestApplication;
 let repository: Repository<QuestEntity>;
 let token;
@@ -25,7 +27,7 @@ describe("Music route", ()=>{
     beforeAll(async()=> {
         const module = await
             Test.createTestingModule({
-                imports: [
+                imports: [PlaylistModule, 
                     MusicModule,
                     AuthModule,
                     TypeOrmModule.forRoot({
