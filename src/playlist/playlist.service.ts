@@ -37,28 +37,41 @@ export class PlaylistService {
         }
         let playlistDto:PlaylistDTO = {name:playlistCreation.name,user:userId,musics:musics};
         let playlistCreate = await this.playlistEntityRepository.create(playlistDto);
-        console.log(playlistCreate);
         return await this.playlistEntityRepository.save(playlistCreate);
     }
 
     async findAll(userId:string){
-        console.log(userId);
         let playlists = await this.playlistEntityRepository.find({where:{user:userId},relations:['user','musics']});
-        let all = await this.playlistEntityRepository.find({relations:['user','musics']});
-        console.log(all);
         let playlistsRO:PlaylistRO[] =[];
         playlists.forEach(function(part, index) {
             playlistsRO.push(part.toResponseObject());
         }, playlists);
         return playlistsRO;
     }
-    //TODO restrict modification to owner
+
     async addMusic(playlistId:string,musicId:string,userId:string){
-        console.log("p^l"+playlistId);
         let playlist = await this.playlistEntityRepository.findOne({where:{id:playlistId},relations:['user','musics']});
+        if(playlist.user.id!==userId){
+            throw new HttpException('Its not your playlist', HttpStatus.UNAUTHORIZED);
+        }
         let musicEntity = await this.musicService.findById(musicId);
         playlist.musics.push(musicEntity);
         return await this.playlistEntityRepository.save( playlist);
+    }
+
+    async deleteMusic(playlistId:string,musicId:string,userId:string){
+        let playlist = await this.playlistEntityRepository.findOne({where:{id:playlistId},relations:['user','musics']});
+        if(playlist.user.id!==userId){
+            throw new HttpException('Its not your playlist', HttpStatus.UNAUTHORIZED);
+
+        }
+        for (let i = 0; i < playlist.musics.length; i++) {
+            if(playlist.musics[i].id === musicId){
+                playlist.musics.splice(i,1);
+                return await this.playlistEntityRepository.save( playlist);
+            }
+        }
+        throw new HttpException('Playlist not found', HttpStatus.NOT_FOUND);
     }
 
 
@@ -76,12 +89,16 @@ export class PlaylistService {
     }
 
 
-    async findById(PlaylistId:string){
-        let Playlist = await this.playlistEntityRepository.findOne({where:{id:PlaylistId}});
-        if(!Playlist){
+    async findById(PlaylistId:string,userId:string){
+        let playlist = await this.playlistEntityRepository.findOne({where:{id:PlaylistId},relations:['user','musics']});
+        if(!playlist){
             throw new HttpException('Playlist not found', HttpStatus.NOT_FOUND);
         }
-        return Playlist;
+        if(playlist.user.id!==userId){
+            throw new HttpException('Its not your playlist', HttpStatus.UNAUTHORIZED);
+
+        }
+        return playlist;
     }
 
 }

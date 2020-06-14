@@ -6,14 +6,9 @@ import {
 } from "@nestjs/common";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
-import {FileInterceptor} from "@nestjs/platform-express";
-import {QuestCreation} from "../quest/quest.validation";
 import { diskStorage } from  'multer';
-import { extname } from "path";
-import {PsychologistDTO} from "../psychologist/psychologist.dto";
 import {PlaylistEntity} from "./playlist.entity";
 import {PlaylistCreation, PlaylistRO} from "./playlist.dto";
-import {MusicRO} from "../music/music.dto";
 let fs = require('fs');
 const FileType = require('file-type');
 
@@ -27,15 +22,14 @@ export class PlaylistController {
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async addMusic(@Param('playlistId') playlistId,@Param('idMusic') musicId,@User() user) {
-        console.log("heho");
         return await this.playlistService.addMusic(playlistId,musicId,user.userId);
     }
 
     @Get(':playlistId')
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({type: PlaylistRO})
-    async findById(@Param('playlistId') playlistId) {
-        let Playlist:PlaylistEntity = await this.playlistService.findById(playlistId);
+    async findById(@Param('playlistId') playlistId,@User() user) {
+        let Playlist:PlaylistEntity = await this.playlistService.findById(playlistId,user.userId);
         return Playlist.toResponseObject();
     }
 
@@ -51,6 +45,14 @@ export class PlaylistController {
     @ApiCreatedResponse({})
     async create(@Body() playlist:PlaylistCreation,@User() user) {
         return await this.playlistService.create(playlist,user.userId);
+    }
+
+
+    @Delete(':playlistId/deleteMusic/:idMusic')
+    @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({})
+    async deleteMusic(@Param('playlistId') playlistId,@Param('idMusic') idMusic,@User() user) {
+        return await this.playlistService.deleteMusic(playlistId,idMusic,user.userId);
     }
 
 

@@ -134,10 +134,43 @@ describe("Music route", ()=>{
     it('/ (Post) GetM playlist', async () => {
         let res = await  request(app.getHttpServer())
             .get('/playlist/').set('Authorization', 'Bearer ' + token)
-            .expect(200)
+            .expect(200);
         expect(res.body[0].musics[0].id).toBe(id);
     });
 
+
+    it('/ (Post) Get a playlist', async () => {
+        let res = await  request(app.getHttpServer())
+            .get('/playlist/'+idPlaylist).set('Authorization', 'Bearer ' + token)
+            .expect(200).expect({
+                id: idPlaylist,
+                name: 'playlistchill',
+                musics: [
+                    {
+                        id: id,
+                        name: 'davidgeto',
+                        duration: 45,
+                        linkDownload: 'localhost:3000/music/'+id+'/download'
+                    }
+                ]
+            })
+    });
+
+
+    it('/ (Delete) Delete music to playlist', () => {
+        return request(app.getHttpServer())
+            .delete('/playlist/'+idPlaylist+'/deleteMusic/'+id).set('Authorization', 'Bearer ' + token)
+            .expect(200)
+
+    });
+
+
+    it('/ (Post) Check music remove playlist', async () => {
+        let res = await  request(app.getHttpServer())
+            .get('/playlist/').set('Authorization', 'Bearer ' + token)
+            .expect(200);
+        expect(res.body[0].musics.length).toBe(0);
+    });
 
 
     it('/ (Delete) Delete musics', async () => {
