@@ -150,7 +150,7 @@ describe("Music route", ()=>{
                         id: id,
                         name: 'davidgeto',
                         duration: 45,
-                        linkDownload: 'localhost:3000/music/'+id+'/download'
+                        linkDownload: process.env.APP_URL+'/music/'+id+'/download'
                     }
                 ]
             })
@@ -197,7 +197,6 @@ describe("Music route", ()=>{
             if (err) {
                 return console.log('Unable to scan directory: ' + err);
             }
-
             files.forEach(function (file) {
                 fs.unlinkSync('./song/'+file);
             });
