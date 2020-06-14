@@ -150,7 +150,7 @@ describe("Music route", ()=>{
                         id: id,
                         name: 'davidgeto',
                         duration: 45,
-                        linkDownload: process.env.APP_URL+'/music/'+id+'/download'
+                        linkDownload: process.env.APP_URL+":"+process.env.APP_PORT+'/music/'+id+'/download'
                     }
                 ]
             })
