@@ -67,7 +67,12 @@ export class QuestService {
     }
 
     async questDone(userId: string){
-        return await this.questValidationRepository.find({where:{user:userId}});
+        let quest:QuestValidationEntity[]  =  await this.questValidationRepository.find({where:{user:userId},relations:["quest"]});
+        let result = [];
+        quest.forEach(function(part, index) {
+            result.push(part.quest)
+        });
+        return result;
     }
 
     async findById(questId:string){

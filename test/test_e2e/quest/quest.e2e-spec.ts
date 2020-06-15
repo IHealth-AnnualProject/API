@@ -102,7 +102,7 @@ describe("Quest route", ()=>{
     it('/ (Get) get quests done return 1', async () => {
         let result =  await  request(app.getHttpServer())
             .get('/quest/done').set('Authorization', 'Bearer ' + token);
-        expect(result.body.length).toBe(1);
+        expect(result.body[0].id).toBe(id);
     });
 
     afterAll(async () => {
