@@ -43,11 +43,11 @@ export class QuestController {
         return await this.questService.validate(user.userId,param.idQuest);
     }
 
-    @Delete('')
+    @Delete(':idQuest')
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({
     })
-    async delete(@Param() param,@User() user,) {
-        return await this.questService.delete(param.id);
+    async delete(@Param('idQuest') questId,@User() user,) {
+        return await this.questService.delete(questId);
     }
 }

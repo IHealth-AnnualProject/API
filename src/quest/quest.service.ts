@@ -57,8 +57,8 @@ export class QuestService {
         return quests;
     }
 
-    async delete(id) {
-
+    async delete(questId:string){
+        return await this.questEntityRepository.delete(questId);
     }
 
     async isQuestDone(userId: string, questid: string){
