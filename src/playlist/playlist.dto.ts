@@ -1,8 +1,7 @@
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {IsNotEmpty} from "class-validator";
-import {MusicEntity} from "../music/music.entity";
-import {UserEntity} from "../user/user.entity";
 import {MusicRO} from "../music/music.dto";
+import {MusicEntity} from "../music/music.entity";
+import {IsNotEmpty} from "class-validator";
 
 
 export class PlaylistRO {

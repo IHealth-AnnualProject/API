@@ -122,7 +122,6 @@ describe("Music route", ()=>{
             .expect(200);
         expect(res.body.length).toBe(1);
         idPlaylist = res.body[0].id;
-        console.log(res.body[0].musics)
     });
 
     it('/ (Post) Add music to playlist', () => {

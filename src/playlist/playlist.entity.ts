@@ -1,8 +1,7 @@
 import {Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {MusicRO} from "../music/music.dto";
 import {MusicEntity} from "../music/music.entity";
-import {FriendsEntity} from "../friends/friends.entity";
 import {PlaylistRO} from "./playlist.dto";
+import {MusicRO} from "../music/music.dto";
 import {UserEntity} from "../user/user.entity";
 
 

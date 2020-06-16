@@ -4,9 +4,8 @@ import {Repository} from "typeorm";
 import {PlaylistEntity} from "./playlist.entity";
 import {PlaylistCreation, PlaylistDTO, PlaylistRO} from "./playlist.dto";
 import {MusicService} from "../music/music.service";
-import {MusicEntity} from "../music/music.entity";
 import {UserService} from "../user/user.service";
-import {PsychologistDTO} from "../psychologist/psychologist.dto";
+
 
 
 

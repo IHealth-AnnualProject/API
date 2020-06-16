@@ -69,17 +69,10 @@ describe("Report route", ()=>{
     });
 
 
-    it('/ (Get) get reports', async () => {
+    it('/ (Get) get reports for user', async () => {
         let result =  await  request(app.getHttpServer())
             .get('/report/'+idUser1+'/reported').set('Authorization', 'Bearer ' + token_user1);
         expect(result.body.length).toBe(0);
-    });
-
-    it('/ (Get) get reports', async () => {
-
-        let result =  await  request(app.getHttpServer())
-            .get('/report').set('Authorization', 'Bearer ' + token_user1);
-        expect(result.body.length).toBe(1);
     });
 
     afterAll(async () => {

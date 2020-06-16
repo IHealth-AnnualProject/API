@@ -23,7 +23,6 @@ export class ReportController {
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async findById(@Param('userId') userId) {
-        console.log("hoho")
        return await this.reportService.findReportOnUser(userId);
     }
 

@@ -89,7 +89,6 @@ export class MusicController {
     @ApiCreatedResponse({
     })
     async delete(@Param('musicId') musicId,@User() user,) {
-        console.log("delete");
         let music:MusicEntity = await this.musicService.findById(musicId);
         await this.musicService.delete(musicId);
         fs.unlinkSync(music.filename);
