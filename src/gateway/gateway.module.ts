@@ -7,11 +7,12 @@ import {MessageModule} from "../message/message.module";
 import {AuthModule} from "../auth/auth.module";
 import {JwtStrategy} from "../auth/jwt.strategy";
 import {UserModule} from "../user/user.module";
+import {DialogFlowService} from "../dialogflow/dialogflow.service";
 
 
 @Module({
     imports: [MessageModule,AuthModule,UserModule],
-    providers: [GatewayService,JwtStrategy],
+    providers: [GatewayService,JwtStrategy,DialogFlowService],
     controllers:[],
     exports: [GatewayService],
 })

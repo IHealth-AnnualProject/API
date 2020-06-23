@@ -13,8 +13,8 @@ import {GatewayModule} from "./gateway/gateway.module";
 import {QuestModule} from "./quest/quest.module";
 import {MusicModule} from "./music/music.module";
 import {PlaylistModule} from "./playlist/playlist.module";
-import {ErrorModule} from "./error/error.module";
 import {ReportModule} from "./report/report.module";
+import {ErrorModule} from "./error/error.module";
 
 
 @Module({

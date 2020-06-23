@@ -15,7 +15,8 @@ import {UserProfileModule} from "../../../src/userProfile/userProfile.module";
 import {MessageService} from "../../../src/message/message.service";
 import {MessageModule} from "../../../src/message/message.module";
 import {GatewayModule} from "../../../src/gateway/gateway.module";
-jest.setTimeout(10000);
+import {DialogFlowService} from "../../../src/dialogflow/dialogflow.service";
+jest.setTimeout(100000);
 let token_user1;
 let token_user2;
 let token_user3;
@@ -28,6 +29,7 @@ describe("message route", ()=>{
         const module = await
             Test.createTestingModule({
                 imports: [
+                    DialogFlowService,
                     GatewayModule,
                     MessageModule,
                     AuthModule,
@@ -77,7 +79,7 @@ describe("message route", ()=>{
         await new Promise(r => setTimeout(r, 400));
         let result = await request(app.getHttpServer())
             .get('/conversation/').set('Authorization', 'Bearer ' + token_user1)
-            .expect(200)
+            .expect(200);
         expect(result.body.length).toBe(2);
 
     });
@@ -94,6 +96,20 @@ describe("message route", ()=>{
             .expect(200);
         expect(result.body.length).toBe(4);
         expect(result.body[3].textMessage).toBe("4");
+
+    });
+
+
+    it('/ (Get) Try to send message to chatbot', async () => {
+        let message ={ token:token_user2, data:{content: "Hello",idReceiver:'betsbi-chatbot'}};
+        //setTimeout(() => socket.emit('sendMessage',message), 1000);
+        await socket.emit('sendMessage',message);
+        await new Promise(r => setTimeout(r, 4000));
+        let result = await request(app.getHttpServer())
+            .get('/conversation/'+'betsbi-chatbot'+'/user').set('Authorization', 'Bearer ' + token_user2)
+            .expect(200);
+        expect(result.body.length).toBe(2);
+        expect(result.body[0].textMessage).toBe("Hello");
 
     });
 

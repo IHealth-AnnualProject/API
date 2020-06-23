@@ -12,12 +12,15 @@ import {Message, SocketWS, UserWS} from "../decorator/user.decorator";
 import {MessageService} from "../message/message.service";
 import {MessageDTO} from "../message/message.dto";
 import {UserService} from "../user/user.service";
-
+import {UserDTO} from "../user/user.dto";
+import {DialogFlowService} from "../dialogflow/dialogflow.service";
+const { v4: uuidv4 } = require('uuid');
 
 
 @WebSocketGateway(4001, { transport: ['websocket'] })
 export class GatewayService implements OnGatewayConnection, OnGatewayDisconnect {
-    constructor(private messageService:MessageService,private userService:UserService) {
+    constructor(private messageService:MessageService,private userService:UserService,private dialogFlowService:DialogFlowService) {
+        this._chatBotCreation();
     }
 
     @WebSocketServer()
@@ -46,12 +49,33 @@ export class GatewayService implements OnGatewayConnection, OnGatewayDisconnect 
     @SubscribeMessage('sendMessage')
     @UseGuards(WsJwtGuard)
     async sendMessage( @UserWS() user, @SocketWS() socket, @Message() message) {
+
+        /*if(message.idReceiver==='betsbi-chatbot'){
+            let receiver = await this.userService.findOneById(message.idReceiver);
+            if(!receiver){
+                let user:UserDTO= {id:message.idReceiver,username:"Betsbi-chatbot",password:uuidv4(),isPsy:true};
+                await this.userService.register(user);
+                let check = await this.userService.findOneById(message.idReceiver);
+            }
+        }*/
+
         let receiver = await this.userService.findOneById(message.idReceiver);
         if(receiver){
-            this.logger.log('sendMessage');
             let messageDTO:MessageDTO = this._messageToMessageDTO(message,user);
+            if(message.idReceiver==='betsbi-chatbot'){
+                let res:string = await this.dialogFlowService.sendMessage(messageDTO.from,messageDTO.textMessage);
+                if(res){
+                    let botMessageDTO:MessageDTO = this._botMessageToMessageDTO(res,user);
+                    this.wss.to(user.id).emit('newMessage',{message: botMessageDTO, senderUsername:user.username});
+                    await this.messageService.create(messageDTO);
+                    await this.messageService.create(botMessageDTO);
+                    return
+                }
+
+            }
             await this.messageService.create(messageDTO);
             this.wss.to(message.idReceiver).emit('newMessage',{message: messageDTO, senderUsername:user.username});
+            this.logger.log('sendMessage');
         }
 
     }
@@ -63,5 +87,22 @@ export class GatewayService implements OnGatewayConnection, OnGatewayDisconnect 
         res.from=user.id;
         res.to=message.idReceiver;
         return res;
+    }
+
+    _botMessageToMessageDTO(content:string,user){
+        let res :MessageDTO = new MessageDTO();
+        res.textMessage=content;
+        res.date = Date.now().toString();
+        res.from="betsbi-chatbot";
+        res.to=user.id;
+        return res;
+    }
+
+    async _chatBotCreation(){
+        let chatbot = await this.userService.findOneById("betsbi-chatbot");
+        if(!chatbot){
+            let user:UserDTO= {id:"betsbi-chatbot",username:"Betsbi-chatbot",password:uuidv4(),isPsy:true};
+            await this.userService.register(user);
+        }
     }
 }
