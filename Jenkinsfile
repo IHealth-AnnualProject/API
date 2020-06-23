@@ -7,7 +7,7 @@ pipeline {
     stage('Install'){
       steps {
        sh 'killall -9 node || true'
-       sh 'systemctl stop betsbi.service'
+       sh 'sudo /bin/systemctl stop betsbi.service'
        sleep(time:3,unit:"SECONDS")
        sh 'npm install'
       }
@@ -19,7 +19,7 @@ pipeline {
     }
     stage('Deploy') {
           steps {
-            sh 'JENKINS_NODE_COOKIE=dontKillMe systemctl start betsbi.service'
+            sh 'JENKINS_NODE_COOKIE=dontKillMe sudo /bin/systemctl start betsbi.service'
           }
         }
   }
