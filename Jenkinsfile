@@ -7,7 +7,7 @@ pipeline {
     stage('Install'){
       steps {
        sh 'killall -9 node || true'
-       systemctl stop betsbi.service
+       sh 'systemctl stop betsbi.service'
        sleep(time:3,unit:"SECONDS")
        sh 'npm install'
       }
