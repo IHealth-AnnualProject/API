@@ -17,6 +17,8 @@ export class PsychologistDTO {
     geolocation:string;
     @ApiPropertyOptional()
     user:UserRO;
+    @ApiPropertyOptional()
+    skin:string
 }
 
 export class PsychologistDTOID {
@@ -34,6 +36,8 @@ export class PsychologistDTOID {
     geolocation:string;
     @ApiPropertyOptional()
     user;
+    @ApiPropertyOptional()
+    skin:string
 }
 
 export class PsychologistRO{
@@ -51,4 +55,6 @@ export class PsychologistRO{
     birthdate: Date;
     @ApiPropertyOptional()
     description:string;
+    @ApiPropertyOptional()
+    skin:string
 }

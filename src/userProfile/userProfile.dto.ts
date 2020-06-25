@@ -34,6 +34,9 @@ export class UserProfileDTO {
     moralStats:[MoralStatsDTO];
 
     user;
+    @ApiPropertyOptional()
+    skin:string
+
 }
 
 export class UserProfileRO{
@@ -47,4 +50,6 @@ export class UserProfileRO{
     user:UserRO
     @ApiPropertyOptional()
     birthdate:Date;
+    @ApiPropertyOptional()
+    skin:string
 }

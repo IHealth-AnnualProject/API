@@ -19,7 +19,7 @@ describe("Auth route", ()=>{
                 type: "mysql",
                 host: process.env.NEST_HOST,
                 username: process.env.TEST_USERNAME,
-                password:process.env.TEST_PASSWORD || '',
+                password: process.env.TEST_PASSWORD || '',
                 synchronize: true,
                 logging: false,
                 entities: ["src/**/*.entity.ts"],
@@ -57,7 +57,8 @@ describe("Auth route", ()=>{
                 message: [
                     'username should not be empty',
                     'password should not be empty',
-                    'isPsy should not be empty'
+                    'isPsy should not be empty',
+                    'email must be an email'
                 ],
                 error: 'Bad Request'
             });
@@ -66,14 +67,21 @@ describe("Auth route", ()=>{
     it('/ (POST) Register without is psy argument should return 400', () => {
         return request(app.getHttpServer())
             .post('/auth/register')
-            .send({username:"pablota",password:"escobar"})
+            .send({username:"pablota",password:"escobar",email:"hello@hello.fr"})
+            .expect(400)
+    });
+
+    it('/ (POST) Register with wrongemail argument should return 400', () => {
+        return request(app.getHttpServer())
+            .post('/auth/register')
+            .send({username:"pablota",password:"escobar",isPsy:true,email:"helloahello.fr"})
             .expect(400)
     });
 
     it('/ (POST) Register with argument should return 200', () => {
         return request(app.getHttpServer())
             .post('/auth/register')
-            .send({username:"pablota",password:"escobar",isPsy:true})
+            .send({username:"pablota",password:"escobar",isPsy:true,email:"hello@hello.fr"})
             .expect(201)
     });
 

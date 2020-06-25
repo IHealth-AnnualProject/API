@@ -39,7 +39,7 @@ describe("Error route", ()=>{
 
         await app.init();
         repository = module.get('UserProfileEntityRepository');
-        await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar",isPsy:true });
+        await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar",isPsy:true ,email:"hello@hello.fr" });
         let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
         token = result.body.token.access_token;
         userId = result.body.user.id;

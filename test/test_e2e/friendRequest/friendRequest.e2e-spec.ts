@@ -47,10 +47,10 @@ describe("friendRequest route", ()=>{
         await app.init();
         repository = module.get('FriendRequestEntityRepository');
 
-        await request(app.getHttpServer()).post('/auth/register').send({username:"medi",password:"escobar",isPsy:false });
-        await request(app.getHttpServer()).post('/auth/register').send({username:"herve",password:"escobar",isPsy:false });
-        await request(app.getHttpServer()).post('/auth/register').send({username:"jeanne",password:"escobar",isPsy:false });
-        let user1_result = await request(app.getHttpServer()).post('/auth/login').send({username:"herve",password:"escobar"});
+        await request(app.getHttpServer()).post('/auth/register').send({username:"medi",password:"escobar",isPsy:false,email:"hello@hello.fr" });
+        await request(app.getHttpServer()).post('/auth/register').send({username:"herve",password:"escobar",isPsy:false ,email:"hello@hello.fr"});
+        await request(app.getHttpServer()).post('/auth/register').send({username:"jeanne",password:"escobar",isPsy:false ,email:"hello@hello.fr"});
+        let user1_result = await request(app.getHttpServer()).post('/auth/login').send({username:"herve",password:"escobar" });
         token_user1 = user1_result.body.token.access_token;
         idUser1 = user1_result.body.user.id;
         let user2_result = await request(app.getHttpServer()).post('/auth/login').send({username:"jeanne",password:"escobar"});

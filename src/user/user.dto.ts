@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import {IsEmail, IsNotEmpty} from 'class-validator';
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {UserProfileRO} from "../userProfile/userProfile.dto";
 
@@ -16,6 +16,25 @@ export class UserDTO {
     @ApiProperty()
     @IsNotEmpty()
     isPsy:boolean;
+}
+
+export class UserCreation {
+    id:string;
+    @ApiProperty()
+    @IsNotEmpty()
+    username: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    password: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    isPsy:boolean;
+
+    @ApiPropertyOptional()
+    @IsEmail()
+    email:string;
 }
 
 export class UserRO {

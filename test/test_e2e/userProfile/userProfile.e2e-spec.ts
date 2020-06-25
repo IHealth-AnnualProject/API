@@ -42,7 +42,7 @@ describe("UserProfile route", ()=>{
 
         await app.init();
         repository = module.get('UserProfileEntityRepository');
-        await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar" ,isPsy:false});
+        await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar" ,isPsy:false,email:"hello@hello.fr"});
         let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
         token = result.body.token.access_token;
         userId = result.body.user.id;
@@ -83,7 +83,8 @@ describe("UserProfile route", ()=>{
                     isPsy: false, xp:0
 
                 },
-                birthdate: '0000-00-00'
+                birthdate: '0000-00-00',
+                skin: ''
             });
     });
 
@@ -101,7 +102,8 @@ describe("UserProfile route", ()=>{
                      isPsy: false,
                      xp:0
                  },
-             birthdate: '0000-00-00'
+             birthdate: '0000-00-00',
+             skin: ''
             });
     });
 

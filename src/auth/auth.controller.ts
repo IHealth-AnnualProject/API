@@ -2,7 +2,7 @@ import {Body, Controller, Post, Get, HttpException, HttpStatus, UseGuards} from 
 
 import { AuthService } from './auth.service';
 import {UserService} from "../user/user.service";
-import {UserAndTokenResponse, UserDTO} from "../user/user.dto";
+import {UserAndTokenResponse, UserCreation, UserDTO} from "../user/user.dto";
 import {ApiCreatedResponse} from "@nestjs/swagger";
 import {UserProfileDTO, UserProfileDTOID} from "../userProfile/userProfile.dto";
 import {UserLogin} from "./auth.validation";
@@ -14,12 +14,11 @@ import {PsychologistService} from "../psychologist/psychologist.service";
 import {PsychologistDTOID} from "../psychologist/psychologist.dto";
 @Controller('auth')
 export class AuthController {
-    constructor(
-        private userService: UserService,
-        private authService: AuthService,
-        private userProfileService:UserProfileService,
-        private psychologistService:PsychologistService
-    ) {}
+    constructor(private userService: UserService,
+                private authService: AuthService,
+                private userProfileService: UserProfileService,
+                private psychologistService: PsychologistService) {
+    }
 
     @ApiCreatedResponse({
         description: 'Users login.',
@@ -29,9 +28,9 @@ export class AuthController {
     async login(@Body() userLogin: UserLogin) {
         const user = await this.userService.login(userLogin);
         const token = await this.authService.login(user);
-        if(user.isPsy) {
+        if (user.isPsy) {
             await this.psychologistService.findByUserId(user.id);
-        }else{
+        } else {
             await this.userProfileService.findByUserId(user.id);
         }
         return {user, token};
@@ -39,23 +38,24 @@ export class AuthController {
 
 
     @Post('register')
-    async register(@Body() userDTO: UserDTO) {
-        if(userDTO.username===undefined || userDTO.password===undefined){
-            throw new HttpException('Missing argument password or username', HttpStatus.BAD_REQUEST);
+    async register(@Body() userDTO: UserCreation) {
+        if (userDTO.username === undefined || userDTO.password === undefined ||userDTO.email ===undefined ) {
+            throw new HttpException('Missing argument password username or email', HttpStatus.BAD_REQUEST);
         }
         let user = await this.userService.register(userDTO);
-
-        if(!user.isPsy){
-            let userProfileDto:UserProfileDTOID =new UserProfileDTOID();
-            userProfileDto.user=user.id;
-            userProfileDto.id =user.id;
+        if (!user.isPsy) {
+            let userProfileDto: UserProfileDTOID = new UserProfileDTOID();
+            userProfileDto.user = user.id;
+            userProfileDto.id = user.id;
+            userProfileDto.email = userDTO.email;
             return await this.userProfileService.create(userProfileDto);
         }
-        let psychoID:PsychologistDTOID =new PsychologistDTOID();
-        psychoID.user=user.id;
-        psychoID.id =user.id;
-        psychoID.first_name ="";
-        psychoID.last_name ="";
+        let psychoID: PsychologistDTOID = new PsychologistDTOID();
+        psychoID.user = user.id;
+        psychoID.id = user.id;
+        psychoID.first_name = "";
+        psychoID.last_name = "";
+        psychoID.email = userDTO.email;
         return await this.psychologistService.create(psychoID);
 
     }
@@ -67,6 +67,11 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @Get('is-token-valid')
     async isTokenValid(@User() user) {
-        return {user:user,statusCode:200}
+        return {user: user, statusCode: 200}
+    }
+
+    validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
     }
 }
