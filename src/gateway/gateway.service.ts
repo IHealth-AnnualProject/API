@@ -101,7 +101,7 @@ export class GatewayService implements OnGatewayConnection, OnGatewayDisconnect 
     async _chatBotCreation(){
         let chatbot = await this.userService.findOneById("betsbi-chatbot");
         if(!chatbot){
-            let user:UserDTO= {id:"betsbi-chatbot",username:"Betsbi-chatbot",password:uuidv4(),isPsy:true,email:"bot@oui.fr"};
+            let user:UserDTO= {id:"betsbi-chatbot",username:"Betsbi-chatbot",password:uuidv4(),isPsy:true};
             await this.userService.register(user);
         }
     }

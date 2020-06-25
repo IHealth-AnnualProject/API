@@ -7,7 +7,6 @@ import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
 import {ApiTags, ApiCreatedResponse, ApiBody} from "@nestjs/swagger";
 import {UserProfileService} from "./userProfile.service";
-import {ApiImplicitBody} from "@nestjs/swagger/dist/decorators/api-implicit-body.decorator";
 import {MoralStatsDTO, MoralStatsRO} from "../moral_stats/moralStats.dto";
 import {MoralStatCreation} from "./userProfile.validation";
 
