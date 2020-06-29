@@ -1,5 +1,4 @@
 import {ApiPropertyOptional} from "@nestjs/swagger";
-import {UserEntity} from "../user/user.entity";
 import {UserRO} from "../user/user.dto";
 
 export class ReportRO {

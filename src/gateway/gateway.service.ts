@@ -49,16 +49,6 @@ export class GatewayService implements OnGatewayConnection, OnGatewayDisconnect 
     @SubscribeMessage('sendMessage')
     @UseGuards(WsJwtGuard)
     async sendMessage( @UserWS() user, @SocketWS() socket, @Message() message) {
-
-        /*if(message.idReceiver==='betsbi-chatbot'){
-            let receiver = await this.userService.findOneById(message.idReceiver);
-            if(!receiver){
-                let user:UserDTO= {id:message.idReceiver,username:"Betsbi-chatbot",password:uuidv4(),isPsy:true};
-                await this.userService.register(user);
-                let check = await this.userService.findOneById(message.idReceiver);
-            }
-        }*/
-
         let receiver = await this.userService.findOneById(message.idReceiver);
         if(receiver){
             let messageDTO:MessageDTO = this._messageToMessageDTO(message,user);

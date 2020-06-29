@@ -48,11 +48,19 @@ export class UserRO {
     isPsy:boolean;
     @ApiProperty()
     xp:number;
+    @ApiProperty()
+    skin:string;
 }
 
 export class Token {
     @ApiProperty()
     access_token: string;
+}
+
+
+export class UserModif {
+    @ApiProperty()
+    skin: string;
 }
 export class UserAndTokenResponse {
     @ApiProperty()

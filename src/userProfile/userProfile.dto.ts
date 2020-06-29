@@ -14,9 +14,7 @@ export class UserProfileDTOID {
     description: string;
     @ApiPropertyOptional()
     email:string;
-
     moralStats:[MoralStatsDTO];
-
     user;
 }
 
@@ -34,8 +32,6 @@ export class UserProfileDTO {
     moralStats:[MoralStatsDTO];
 
     user;
-    @ApiPropertyOptional()
-    skin:string
 
 }
 
@@ -50,6 +46,5 @@ export class UserProfileRO{
     user:UserRO
     @ApiPropertyOptional()
     birthdate:Date;
-    @ApiPropertyOptional()
-    skin:string
+
 }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { UserEntity } from './user.entity';
-import { UserDTO } from './user.dto';
+import {UserDTO, UserModif} from './user.dto';
 import {UserLogin} from "../auth/auth.validation";
 import {UserProfileService} from "../userProfile/userProfile.service";
 import {UserProfileDTO} from "../userProfile/userProfile.dto";
@@ -64,6 +64,13 @@ export class UserService {
         user.xp =user.xp+xp;
         await this.userRepository.update(user.id, user);
         return;
+    }
+
+    async update(userId:string,change:UserModif){
+        let me = await this.userRepository.findOne({where:{id:userId}});
+        me.skin=change.skin;
+        await this.userRepository.update(userId, me);
+
     }
 
 }

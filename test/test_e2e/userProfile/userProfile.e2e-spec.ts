@@ -80,11 +80,10 @@ describe("UserProfile route", ()=>{
                     id: userId,
                     created: creationDate,
                     username: 'pabla',
-                    isPsy: false, xp:0
-
+                    isPsy: false, xp:0,
+                    skin: ''
                 },
                 birthdate: '0000-00-00',
-                skin: ''
             });
     });
 
@@ -100,10 +99,10 @@ describe("UserProfile route", ()=>{
                      created: creationDate,
                      username: 'pabla',
                      isPsy: false,
-                     xp:0
-                 },
+                     xp:0,
+                    skin: ''
+                },
              birthdate: '0000-00-00',
-             skin: ''
             });
     });
 

@@ -50,6 +50,6 @@ export class PsychologistEntity {
         if(user instanceof UserEntity ){
             user=user.toResponseObject();
         }
-        return {first_name:this.first_name,last_name:this.last_name,birthdate:this.birthdate,description:this.description,id:this.id,email:this.email,user:user,skin:this.skin};
+        return {first_name:this.first_name,last_name:this.last_name,birthdate:this.birthdate,description:this.description,id:this.id,email:this.email,user:user,skin:this.skin,geolocation:this.geolocation};
     }
 }

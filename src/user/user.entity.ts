@@ -33,6 +33,11 @@ export class UserEntity {
     })
     xp:number;
 
+    @Column('text',{
+        default: ''
+    })
+    skin: string;
+
     @BeforeInsert()
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);
@@ -43,7 +48,7 @@ export class UserEntity {
     }
 
     toResponseObject(): UserRO {
-        return {id:this.id,created:this.created,username:this.username,isPsy:this.isPsy,xp:this.xp};
+        return {id:this.id,created:this.created,username:this.username,isPsy:this.isPsy,xp:this.xp,skin:this.skin};
     }
 
     }

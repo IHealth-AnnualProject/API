@@ -57,4 +57,6 @@ export class PsychologistRO{
     description:string;
     @ApiPropertyOptional()
     skin:string
+    @ApiPropertyOptional()
+    geolocation:string
 }

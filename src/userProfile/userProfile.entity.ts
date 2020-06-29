@@ -19,11 +19,6 @@ export class UserProfileEntity {
     })
     email: string;
 
-    @Column('text',{
-        default: ''
-    })
-    skin: string;
-
     @OneToMany(type => MoralStatsEntity, moral => moral.userProfile)
     moral: MoralStatsEntity[];
 
@@ -47,6 +42,6 @@ export class UserProfileEntity {
         if(user instanceof UserEntity ){
             user=user.toResponseObject();
         }
-        return {id:this.id,email:this.email,description:this.description,user:user,birthdate:this.birthdate,skin:this.skin};
+        return {id:this.id,email:this.email,description:this.description,user:user,birthdate:this.birthdate};
     }
 }
