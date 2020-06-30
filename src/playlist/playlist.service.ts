@@ -23,7 +23,7 @@ export class PlaylistService {
     
 
     async create(playlistCreation:PlaylistCreation,userId:string){
-        let playlist = await this.playlistEntityRepository.findOne({where:{name:playlistCreation.name}});
+        let playlist = await this.playlistEntityRepository.findOne({where:{name:playlistCreation.name,user:userId}});
         if(playlist) {
             throw new HttpException('A Playlist with this name already exist', HttpStatus.CONFLICT);
         }

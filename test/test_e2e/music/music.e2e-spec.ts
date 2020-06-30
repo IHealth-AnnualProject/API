@@ -115,6 +115,12 @@ describe("Music route", ()=>{
             .expect(201)
     });
 
+    it('/ (Post) Second Create playlist musics file', () => {
+        return request(app.getHttpServer())
+            .post('/playlist/').send({name:"playlistchill",musics:[]}).set('Authorization', 'Bearer ' + token)
+            .expect(409)
+    });
+
 
     it('/ (Post) Get playlist', async () => {
         let res = await  request(app.getHttpServer())
