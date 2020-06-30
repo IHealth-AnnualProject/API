@@ -98,6 +98,15 @@ describe("Psychologist route", ()=>{
                 user:{}
             });
     });*/
+    it('/ (PATCH) Modify userProfile should return 200', () => {
+        return request(app.getHttpServer())
+            .patch('/psychologist').set('Authorization', 'Bearer ' + token).send({
+                geolocation: "104 Rue Guynemer, Ermont, France||48.9965786,2.2603474999999946",
+                description: "description",
+                email:'unemail'
+            })
+            .expect(204)
+    });
 
     afterAll(async () => {
         await repository.query('DELETE FROM user_profile;');

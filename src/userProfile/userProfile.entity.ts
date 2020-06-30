@@ -26,7 +26,9 @@ export class UserProfileEntity {
     @JoinColumn()
     user: UserEntity;
 
-    @Column("geometry",{nullable :true})
+    @Column('text',{
+        default: ''
+    })
     geolocation:string;
 
     @Column('text',{

@@ -21,12 +21,6 @@ export class PsychologistEntity {
     })
     last_name: string;
 
-
-    @Column('text',{
-        default: ''
-    })
-    skin: string;
-
     @Column('text',{
         default: ''
     })
@@ -35,7 +29,9 @@ export class PsychologistEntity {
     @Column('date')
     birthdate: Date;
 
-    @Column("geometry",{nullable :true})
+    @Column('text',{
+        default: ''
+    })
     geolocation:string;
 
     @OneToOne(type => UserEntity)
@@ -50,6 +46,6 @@ export class PsychologistEntity {
         if(user instanceof UserEntity ){
             user=user.toResponseObject();
         }
-        return {first_name:this.first_name,last_name:this.last_name,birthdate:this.birthdate,description:this.description,id:this.id,email:this.email,user:user,skin:this.skin,geolocation:this.geolocation};
+        return {first_name:this.first_name,last_name:this.last_name,birthdate:this.birthdate,description:this.description,id:this.id,email:this.email,user:user,geolocation:this.geolocation};
     }
 }
