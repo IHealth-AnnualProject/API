@@ -68,3 +68,8 @@ export class UserAndTokenResponse {
     @ApiProperty()
     token:Token;
 }
+
+export class addXp {
+    @ApiProperty()
+    xp: number;
+}
