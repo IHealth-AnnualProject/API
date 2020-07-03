@@ -11,6 +11,7 @@ import {LocalStrategy} from "./local.strategy";
 import {AuthController} from "./auth.controller";
 import {UserProfileModule} from "../userProfile/userProfile.module";
 import {PsychologistModule} from "../psychologist/psychologist.module";
+import { PsyValidationModule } from '../psy_validation/psy_validation.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import {PsychologistModule} from "../psychologist/psychologist.module";
         }),
         UserProfileModule,
         PsychologistModule,
+        PsyValidationModule
     ],
     providers: [AuthService, LocalStrategy, JwtStrategy],
     controllers:[AuthController],

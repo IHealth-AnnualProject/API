@@ -30,7 +30,7 @@ export class UserService {
     }
 
 
-    async register(data: UserDTO) {
+    async register(data: UserDTO,psyRegister=false) {
         // TODOOO CREER LE PROFILE ICI
         const { username } = data;
         let user = await this.userRepository.findOne({where: { username }});
@@ -38,7 +38,9 @@ export class UserService {
             throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
         }
         user = await this.userRepository.create(data);
-        await this.userRepository.save(user);
+        if(!psyRegister) {
+          await this.userRepository.save(user);
+        }
         return user ;
     }
 

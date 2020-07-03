@@ -42,6 +42,12 @@ describe("Psychologist route", ()=>{
         let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
         token = result.body.token.access_token;
         userId = result.body.user.id;
+
+        let adminToken = result.body.token.access_token;
+        let res =await request(app.getHttpServer()).get('/auth/valid').set('Authorization', 'Bearer ' + adminToken);
+        let idvalid = res.body[0].id
+        await request(app.getHttpServer()).post('/auth/validatePsy/'+idvalid).set('Authorization', 'Bearer ' + adminToken);
+
     });
 
 
@@ -52,6 +58,7 @@ describe("Psychologist route", ()=>{
          expect(res.body.length).toBe(1);
          id = res.body[0].id
     });
+
 
 
 
