@@ -26,7 +26,7 @@ export class ErrorEntity {
     state:ErrorState;
 
     toResponseObject(): ErrorRO {
-        return {description:this.description,id:this.id,name:this.name,state:this.state};
+        return {description:this.description,id:this.id,name:this.name,state:this.state,created:this.created};
     }
 
 }

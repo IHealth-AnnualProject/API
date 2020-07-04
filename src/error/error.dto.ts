@@ -15,6 +15,8 @@ export class ErrorRO {
     description:string;
     @ApiPropertyOptional()
     state:ErrorState;
+    @ApiPropertyOptional()
+    created:Date;
 }
 
 export class ErrorDTO {
