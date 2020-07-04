@@ -36,4 +36,13 @@ export class PsyValidationService {
         return await this.psyValidationEntityRepository.delete(errorId);
     }
 
+    async getLast(){
+        let error = await this.psyValidationEntityRepository.find({order:{created:"DESC"}});
+        if(!error){
+            throw new HttpException('Error not found', HttpStatus.NOT_FOUND);
+        }
+        return error[0];
+    }
+
+
 }

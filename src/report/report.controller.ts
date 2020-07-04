@@ -12,6 +12,14 @@ import {ReportCreation} from "./report.validation";
 export class ReportController {
     constructor(private readonly reportService: ReportService) {}
 
+    @Get('getLast')
+    @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({
+    })
+    async getLast() {
+        return await this.reportService.getLast();
+    }
+
     @Get('')
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({type:[ReportRO]})
@@ -42,4 +50,6 @@ export class ReportController {
     async delete(@Param('idReport') reportId,@User() user,) {
         return await this.reportService.delete(reportId);
     }
+
+
 }

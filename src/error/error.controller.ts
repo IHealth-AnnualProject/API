@@ -12,6 +12,13 @@ import {ErrorCreation} from "./error.validation";
 export class ErrorController {
     constructor(private readonly errorService: ErrorService) {}
 
+    @Get('getLast')
+    @UseGuards(JwtAuthGuard)
+    async getLast() {
+        console.log("ououuu");
+        return await this.errorService.getLast();
+    }
+
     @Get('')
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({type:[ErrorRO]})
@@ -35,11 +42,4 @@ export class ErrorController {
         return await this.errorService.create(error);
     }
 
-    @Delete(':idError')
-    @UseGuards(JwtAuthGuard)
-    @ApiCreatedResponse({
-    })
-    async delete(@Param('idError') errorId,@User() user,) {
-        return await this.errorService.delete(errorId);
-    }
 }

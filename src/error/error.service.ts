@@ -45,4 +45,14 @@ export class ErrorService {
         return error;
     }
 
+
+    async getLast(){
+        let error = await this.errorEntityRepository.find({order:{created:"DESC"}});
+        if(!error){
+            throw new HttpException('Error not found', HttpStatus.NOT_FOUND);
+        }
+        return error[0];
+    }
+
+
 }

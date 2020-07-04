@@ -25,6 +25,14 @@ export class AuthController {
         this._admincreation();
     }
 
+    @Get('getLast')
+    @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({
+    })
+    async getLast() {
+        return await this.psyValidationService.getLast();
+    }
+
     @ApiCreatedResponse({
         description: 'Users login.',
         type: UserAndTokenResponse,
@@ -100,4 +108,5 @@ export class AuthController {
       await this.userService.register(user,false);
     }
   }
+
 }
