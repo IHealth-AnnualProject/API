@@ -74,14 +74,14 @@ describe("Auth route", ()=>{
     it('/ (POST) Register with wrongemail argument should return 400', () => {
         return request(app.getHttpServer())
             .post('/auth/register')
-            .send({username:"pablota",password:"escobar",isPsy:true,email:"helloahello.fr"})
+            .send({username:"pablota",password:"escobar",isPsy:false,email:"helloahello.fr"})
             .expect(400)
     });
 
     it('/ (POST) Register with argument should return 200', () => {
         return request(app.getHttpServer())
             .post('/auth/register')
-            .send({username:"pablota",password:"escobar",isPsy:true,email:"hello@hello.fr"})
+            .send({username:"pablota",password:"escobar",isPsy:false,email:"hello@hello.fr"})
             .expect(201)
     });
 
@@ -112,7 +112,7 @@ describe("Auth route", ()=>{
                 user: {
                     userId: userId,
                     username: 'pablota',
-                    isPsy: true
+                    isPsy: false
                 },
                 statusCode: 200
             });

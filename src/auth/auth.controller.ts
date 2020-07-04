@@ -22,7 +22,7 @@ export class AuthController {
                 private psychologistService: PsychologistService,
                 private psyValidationService: PsyValidationService
     ) {
-      this._admincreation();
+        this._admincreation();
     }
 
     @ApiCreatedResponse({
@@ -33,11 +33,6 @@ export class AuthController {
     async login(@Body() userLogin: UserLogin) {
         const user = await this.userService.login(userLogin);
         const token = await this.authService.login(user);
-        if (user.isPsy) {
-            await this.psychologistService.findByUserId(user.id);
-        } else {
-            await this.userProfileService.findByUserId(user.id);
-        }
         return {user, token};
     }
 
@@ -48,6 +43,7 @@ export class AuthController {
             throw new HttpException('Missing argument password username or email', HttpStatus.BAD_REQUEST);
         }
         let user = await this.userService.register(userDTO,userDTO.isPsy);
+
         if (!user.isPsy) {
             let userProfileDto: UserProfileDTOID = new UserProfileDTOID();
             userProfileDto.user = user.id;
@@ -55,13 +51,7 @@ export class AuthController {
             userProfileDto.email = userDTO.email;
             return await this.userProfileService.create(userProfileDto);
         }
-        /*
-        let psychoID: PsychologistDTOID = new PsychologistDTOID();
-        psychoID.user = user.id;
-        psychoID.id = user.id;
-        psychoID.first_name = "";
-        psychoID.last_name = "";
-        psychoID.email = userDTO.email;*/
+
         let psyValidationDTO:PsyValidationDto= {username:user.username,email:userDTO.email,password:userDTO.password};
         return await this.psyValidationService.create(psyValidationDTO);
 
@@ -87,16 +77,18 @@ export class AuthController {
   @Post('validatePsy/:idPsyValidation')
   async validateUser(@User() user,@Param('idPsyValidation') idPsyValidation) {
        let psyValidationEntity= await this.psyValidationService.findById(idPsyValidation);
-       let userDto:UserCreation = {id:"",username:psyValidationEntity.username,password:psyValidationEntity.password,email:psyValidationEntity.email,isPsy:true};
-       let psyUser = await this.userService.register(userDto);
+       let userDto:any = {username:psyValidationEntity.username,password:psyValidationEntity.password,email:psyValidationEntity.email,isPsy:true};
+       let userDTO = await this.userService.register(userDto);
+
        let psychoID: PsychologistDTOID = new PsychologistDTOID();
-       psychoID.user = user.id;
-       psychoID.id = user.id;
+       psychoID.user = userDTO.id;
+       psychoID.id = userDTO.id;
        psychoID.first_name = "";
        psychoID.last_name = "";
        psychoID.email = userDto.email;
        await this.psychologistService.create(psychoID);
        return await this.psyValidationService.delete(idPsyValidation);
+
   }
 
 
@@ -104,8 +96,8 @@ export class AuthController {
     let admin = await this.userService.findOneById("admin");
 
     if(!admin){
-      let user:UserDTO= {id:"admin",username:"admin",password:"admin",isPsy:false};
-      await this.userService.register(user);
+      let user:UserCreation= {id:"admin",username:"admin",password:"admin",isPsy:false,email:"admin@admin.fr"};
+      await this.userService.register(user,false);
     }
   }
 }
