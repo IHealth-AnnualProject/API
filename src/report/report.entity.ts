@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
 import {ReportRO} from "./report.dto";
 import {UserEntity} from "../user/user.entity";
 
@@ -14,6 +14,9 @@ export class ReportEntity {
         default: ''
     })
     description:string;
+
+    @CreateDateColumn()
+    created: Date;
 
     @ManyToOne(type => UserEntity)
     @JoinColumn()
