@@ -33,6 +33,20 @@ export class ErrorController {
        return await this.errorService.findById(errorId);
     }
 
+    @Get(':errorId/validate')
+    @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({})
+    async validById(@Param('errorId') errorId,@User() user) {
+        return await this.errorService.validById(errorId);
+    }
+
+    @Get(':errorId/pending')
+    @UseGuards(JwtAuthGuard)
+    @ApiCreatedResponse({})
+    async pendingById(@Param('errorId') errorId,@User() user) {
+        return await this.errorService.validById(errorId);
+    }
+
 
     @Post('')
     @UseGuards(JwtAuthGuard)

@@ -3,6 +3,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {UserService} from "../user/user.service";
 import {ErrorEntity} from "./error.entity";
+import {ErrorState} from "./error.dto";
 
 
 export class ErrorService {
@@ -55,4 +56,15 @@ export class ErrorService {
     }
 
 
+   async validById(errorId: any) {
+       let me = await this.errorEntityRepository.findOne({where:{id:errorId}});
+       me.state=ErrorState.RESOLVE;
+       await this.errorEntityRepository.update(errorId, me);
+    }
+
+    async pendingById(errorId: any) {
+        let me = await this.errorEntityRepository.findOne({where:{id:errorId}});
+        me.state=ErrorState.PENDING;
+        await this.errorEntityRepository.update(errorId, me);
+    }
 }
