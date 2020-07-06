@@ -37,17 +37,18 @@ describe("Psychologist route", ()=>{
         app.useGlobalPipes(new ValidationPipe());
 
         await app.init();
+        await new Promise(r => setTimeout(r, 1000));
         repository = module.get('UserProfileEntityRepository');
         await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar",isPsy:true ,email:"hello@hello.fr" });
+
+        let resultAdmin = await request(app.getHttpServer()).post('/auth/login').send({username:"admin",password:"admin"});
+        let adminToken = resultAdmin.body.token.access_token;
+        let res =await request(app.getHttpServer()).get('/auth/valid').set('Authorization', 'Bearer ' + adminToken);
+        let idvalid = res.body[0].id;
+        await request(app.getHttpServer()).post('/auth/validatePsy/'+idvalid).set('Authorization', 'Bearer ' + adminToken);
         let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
         token = result.body.token.access_token;
         userId = result.body.user.id;
-
-        let adminToken = result.body.token.access_token;
-        let res =await request(app.getHttpServer()).get('/auth/valid').set('Authorization', 'Bearer ' + adminToken);
-        let idvalid = res.body[0].id
-        await request(app.getHttpServer()).post('/auth/validatePsy/'+idvalid).set('Authorization', 'Bearer ' + adminToken);
-
     });
 
 
@@ -58,10 +59,6 @@ describe("Psychologist route", ()=>{
          expect(res.body.length).toBe(1);
          id = res.body[0].id
     });
-
-
-
-
 
     it('/ (PATCH) Modify psychologist should return 200', () => {
         return request(app.getHttpServer())

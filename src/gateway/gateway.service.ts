@@ -12,7 +12,7 @@ import {Message, SocketWS, UserWS} from "../decorator/user.decorator";
 import {MessageService} from "../message/message.service";
 import {MessageDTO} from "../message/message.dto";
 import {UserService} from "../user/user.service";
-import {UserDTO} from "../user/user.dto";
+import {UserCreation, UserDTO} from "../user/user.dto";
 import {DialogFlowService} from "../dialogflow/dialogflow.service";
 const { v4: uuidv4 } = require('uuid');
 
@@ -91,7 +91,7 @@ export class GatewayService implements OnGatewayConnection, OnGatewayDisconnect 
     async _chatBotCreation(){
         let chatbot = await this.userService.findOneById("betsbi-chatbot");
         if(!chatbot){
-            let user:UserDTO= {id:"betsbi-chatbot",username:"Betsbi-chatbot",password:uuidv4(),isPsy:false};
+            let user:UserCreation= {id:"betsbi-chatbot",username:"Betsbi-chatbot",password:uuidv4(),isPsy:false,email:"admin@admin.fr"};
             await this.userService.register(user);
         }
     }

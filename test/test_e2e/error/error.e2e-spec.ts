@@ -61,12 +61,29 @@ describe("Error route", ()=>{
     });
 
     it('/ (Post) Get a error', async () => {
-        return await  request(app.getHttpServer())
+        let res =  await  request(app.getHttpServer())
             .get('/error/'+id).set('Authorization', 'Bearer ' + token)
-            .expect(200).expect({
-                id: id,
-                name:"An error",description:"c de la daube"
-            })
+            .expect(200);
+        expect(res.body).toMatchObject({
+            created: res.body.created,
+            id: id,
+            name:"An error",description:"c de la daube",
+        })
+    });
+
+    it('/ (Post) Get last error', async () => {
+        let error:ErrorCreation= {name:"An error",description:"coucou les cop1"};
+       await request(app.getHttpServer())
+            .post('/error').set('Authorization', 'Bearer ' + token).send(error)
+            .expect(201);
+        let res =  await  request(app.getHttpServer())
+            .get('/error/getLast').set('Authorization', 'Bearer ' + token)
+            .expect(200);
+        return expect(res.body).toMatchObject({
+            created: res.body.created,
+            id: res.body.id,
+            name:"An error",description:"coucou les cop1"
+        })
     });
 
     afterAll(async () => {

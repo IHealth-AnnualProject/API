@@ -34,5 +34,4 @@ export class UserController {
     {
         return await this.userService.addXP(user.userId,xp.xp);
     }
-
 }

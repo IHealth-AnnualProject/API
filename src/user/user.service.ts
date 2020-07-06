@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { UserEntity } from './user.entity';
-import {UserDTO, UserModif} from './user.dto';
+import {UserCreation, UserDTO, UserModif} from './user.dto';
 import {UserLogin} from "../auth/auth.validation";
 import {UserProfileService} from "../userProfile/userProfile.service";
 import {UserProfileDTO} from "../userProfile/userProfile.dto";
@@ -30,7 +30,7 @@ export class UserService {
     }
 
 
-    async register(data: UserDTO,psyRegister=false) {
+    async register(data: UserCreation,psyRegister=false) {
         // TODOOO CREER LE PROFILE ICI
         const { username } = data;
         let user = await this.userRepository.findOne({where: { username }});
