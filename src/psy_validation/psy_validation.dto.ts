@@ -7,6 +7,8 @@ export class PsyValidationRO {
     username:string;
     @ApiPropertyOptional()
     email:string;
+    @ApiPropertyOptional()
+    created:Date;
 }
 
 export class PsyValidationDto {

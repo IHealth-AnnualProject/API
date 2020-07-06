@@ -27,6 +27,6 @@ export class ReportEntity {
     to:UserEntity;
 
     toResponseObject(): ReportRO {
-        return {description:this.description,id:this.id,name:this.name,from:this.from.toResponseObject(),to:this.to.toResponseObject()};
+        return {created:this.created,description:this.description,id:this.id,name:this.name,from:this.from.toResponseObject(),to:this.to.toResponseObject()};
     }
 }
