@@ -53,12 +53,33 @@ describe("Report route", ()=>{
     });
 
 
-    it('/ (Post) create report return 201 ', () => {
+  it('/ (Post) create report return 400 ', () => {
+    let quest= {name:"Méchant",description:"il a été méchant"};
+    return  request(app.getHttpServer())
+      .post('/report').set('Authorization', 'Bearer ' + token_user1).send(quest)
+      .expect(400);
+  });
+
+  it('/ (Post) create report with wrong idreturn 400 ', () => {
+    let quest:ReportCreation= {name:"Méchant",description:"il a été méchant",reportedUser:"zojodjz"};
+    return  request(app.getHttpServer())
+      .post('/report').set('Authorization', 'Bearer ' + token_user1).send(quest)
+      .expect(400);
+  });
+
+
+  it('/ (Post) create report return 201 ', () => {
         let quest:ReportCreation= {name:"Méchant",description:"il a été méchant",reportedUser:idUser2};
         return  request(app.getHttpServer())
             .post('/report').set('Authorization', 'Bearer ' + token_user1).send(quest)
             .expect(201);
     });
+
+  it('/ (GET) GET report return 201 ', () => {
+    return  request(app.getHttpServer())
+      .get('/report').set('Authorization', 'Bearer ' + token_user1)
+      .expect(200);
+  });
 
     it('/ (Get) get reports', async () => {
         let result =  await  request(app.getHttpServer())
