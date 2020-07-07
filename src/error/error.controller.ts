@@ -44,7 +44,7 @@ export class ErrorController {
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async pendingById(@Param('errorId') errorId,@User() user) {
-        return await this.errorService.validById(errorId);
+        return await this.errorService.pendingById(errorId);
     }
 
 
