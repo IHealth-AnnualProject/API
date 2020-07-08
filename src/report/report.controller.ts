@@ -51,5 +51,11 @@ export class ReportController {
         return await this.reportService.delete(reportId);
     }
 
+      @UseGuards(JwtAuthGuard)
+      @Get('valid/:idReport')
+      async getValidById(@User() user,@Param('idReport') idReport) {
+        return await this.reportService.getReportByID(idReport);
+      }
+
 
 }
