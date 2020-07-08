@@ -75,4 +75,8 @@ export class UserService {
 
     }
 
+    async delete(userID:string) {
+        await this.userRepository.delete(userID);
+    }
+
 }

@@ -61,4 +61,8 @@ export class PsychologistService {
         }
         return user.toResponseObject();
     }
+
+    async delete(psyId:string) {
+        return await this.psychologistEntityRepository.delete(psyId);
+    }
 }

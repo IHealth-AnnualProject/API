@@ -83,4 +83,9 @@ export class UserProfileService {
     async getFriend(id:string){
         return await this.friendsService.getFriends(id);
     }
+
+    async delete(userProfile:string) {
+        return await this.userProfileEntityRepository.delete(userProfile);
+    }
+
 }

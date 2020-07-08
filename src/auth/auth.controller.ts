@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, HttpException, HttpStatus, UseGuards, Param } from '@nestjs/common';
+import {Body, Controller, Post, Get, HttpException, HttpStatus, UseGuards, Param, Delete} from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import {UserService} from "../user/user.service";
@@ -107,6 +107,17 @@ export class AuthController {
       let user:UserCreation= {id:"admin",username:"admin",password:"admin",isPsy:false,email:"admin@admin.fr"};
       await this.userService.register(user,false);
     }
+  }
+
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  async delete(@User() user){
+    await this.userService.delete(user.userId);
+    let userProfile = await this.userProfileService.findByUserId(user.userId);
+    if(userProfile){
+        return await this.userProfileService.delete(user.userId);
+    }
+    return await this.psychologistService.delete(user.userId)
   }
 
 }
