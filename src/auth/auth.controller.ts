@@ -82,6 +82,12 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('valid/:idPsyValidation')
+  async getValidById(@User() user,@Param('idPsyValidation') idPsyValidation) {
+    return await this.psyValidationService.findById(idPsyValidation);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('validatePsy/:idPsyValidation')
   async validateUser(@User() user,@Param('idPsyValidation') idPsyValidation) {
        let psyValidationEntity= await this.psyValidationService.findById(idPsyValidation);
