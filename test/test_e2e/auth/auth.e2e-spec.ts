@@ -81,7 +81,7 @@ describe("Auth route", ()=>{
     it('/ (POST) Register with argument should return 200', () => {
         return request(app.getHttpServer())
             .post('/auth/register')
-            .send({username:"pablota",password:"escobar",isPsy:false,email:"hello@hello.fr"})
+            .send({username:"pablota",password:"escobar",isPsy:false,email:"tkt@hotmail.fr"})
             .expect(201)
     });
 
@@ -116,6 +116,17 @@ describe("Auth route", ()=>{
                 },
                 statusCode: 200
             });
+    });
+
+    it('/ (Get) Register with argument should return 200', async  () => {
+        let result = await request(app.getHttpServer())
+            .post('/auth/login')
+            .send({username:"pablota",password:"escobar"})
+            .expect(201);
+        let token = result.body.token.access_token;
+        return await request(app.getHttpServer())
+            .get('/auth/resetPassword').set('Authorization', 'Bearer ' + token)
+            .expect(200)
     });
 
     afterAll(async () => {

@@ -12,6 +12,8 @@ import {AuthController} from "./auth.controller";
 import {UserProfileModule} from "../userProfile/userProfile.module";
 import {PsychologistModule} from "../psychologist/psychologist.module";
 import { PsyValidationModule } from '../psy_validation/psy_validation.module';
+import {EmailService} from "../email/email.service";
+import {EmailModule} from "../email/email.module";
 
 
 @Module({
@@ -24,7 +26,7 @@ import { PsyValidationModule } from '../psy_validation/psy_validation.module';
         }),
         UserProfileModule,
         PsychologistModule,
-        PsyValidationModule
+        PsyValidationModule,EmailModule
     ],
     providers: [AuthService, LocalStrategy, JwtStrategy],
     controllers:[AuthController],

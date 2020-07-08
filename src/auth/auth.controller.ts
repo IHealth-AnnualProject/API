@@ -14,13 +14,15 @@ import {PsychologistService} from "../psychologist/psychologist.service";
 import {PsychologistDTOID} from "../psychologist/psychologist.dto";
 import { PsyValidationService } from '../psy_validation/psy_validation.service';
 import { PsyValidationDto } from '../psy_validation/psy_validation.dto';
+import {EmailService} from "../email/email.service";
 @Controller('auth')
 export class AuthController {
     constructor(private userService: UserService,
                 private authService: AuthService,
                 private userProfileService: UserProfileService,
                 private psychologistService: PsychologistService,
-                private psyValidationService: PsyValidationService
+                private psyValidationService: PsyValidationService,
+                private emailService:EmailService
     ) {
         this._admincreation();
     }
@@ -125,5 +127,19 @@ export class AuthController {
     }
     return await this.psychologistService.delete(user.userId)
   }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('resetPassword')
+    async resetPassword(@User() user,@Param('idPsyValidation') idPsyValidation) {
+        let email;
+        let userProfile = await this.userProfileService.findByUserId(user.userId);
+        if(userProfile){
+            email = userProfile.email;
+        }else{
+            let psy = await this.psychologistService.findByUserId(user.userId);
+            email = psy.email;
+        }
+        return await this.emailService.sendEmail(email);
+    }
 
 }

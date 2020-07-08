@@ -15,10 +15,13 @@ import {MusicModule} from "./music/music.module";
 import {PlaylistModule} from "./playlist/playlist.module";
 import {ReportModule} from "./report/report.module";
 import {ErrorModule} from "./error/error.module";
+import {PugAdapter} from "@nestjs-modules/mailer/dist/adapters/pug.adapter";
+import {MailerModule} from "@nestjs-modules/mailer";
+import {EmailModule} from "./email/email.module";
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), AuthModule, UserModule,UserProfileModule,PsychologistModule,FriendRequestModule,GatewayModule,QuestModule,MusicModule,PlaylistModule,ErrorModule,ReportModule],
+  imports: [TypeOrmModule.forRoot(), AuthModule, UserModule,UserProfileModule,PsychologistModule,FriendRequestModule,GatewayModule,QuestModule,MusicModule,PlaylistModule,ErrorModule,ReportModule,EmailModule],
   controllers: [AppController],
   providers: [AppService,JwtStrategy],
 })
