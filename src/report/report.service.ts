@@ -60,7 +60,7 @@ export class ReportService {
     }
 
     async getReportByID(reportId:string){
-      let report = await this.reportEntityRepository.findOne({where:{id:reportId}});
+      let report = await this.reportEntityRepository.findOne({where:{id:reportId},relations:["to","from"]});
       if(!report){
         throw new HttpException('Error not found', HttpStatus.NOT_FOUND);
       }

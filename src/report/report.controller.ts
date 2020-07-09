@@ -52,7 +52,7 @@ export class ReportController {
     }
 
       @UseGuards(JwtAuthGuard)
-      @Get('valid/:idReport')
+      @Get(':idReport')
       async getValidById(@User() user,@Param('idReport') idReport) {
         return await this.reportService.getReportByID(idReport);
       }
