@@ -75,8 +75,18 @@ export class UserService {
 
     }
 
+    async changePassword(userId:string,password:string){
+        let me = await this.userRepository.findOne({where:{id:userId}});
+        me.password=password;
+        await this.userRepository.update(userId, me);
+
+    }
+
     async delete(userID:string) {
         await this.userRepository.delete(userID);
     }
 
+    async findByUserName(username:string) :Promise<UserEntity | undefined>{
+        return await this.userRepository.findOne({where:{username:username}});
+    }
 }

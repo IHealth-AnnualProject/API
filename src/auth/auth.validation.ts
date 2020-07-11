@@ -11,3 +11,19 @@ export class UserLogin {
     password: string;
 
 }
+
+export class ChangePassword {
+    @ApiProperty()
+    @IsNotEmpty()
+    token: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    newPassword: string;
+}
+
+export class ResetPassword{
+    @ApiProperty()
+    @IsNotEmpty()
+    username: string;
+}

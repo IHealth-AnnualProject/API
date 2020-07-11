@@ -5,7 +5,7 @@ import {UserService} from "../user/user.service";
 import {UserAndTokenResponse, UserCreation, UserDTO} from "../user/user.dto";
 import {ApiCreatedResponse} from "@nestjs/swagger";
 import {UserProfileDTO, UserProfileDTOID} from "../userProfile/userProfile.dto";
-import {UserLogin} from "./auth.validation";
+import {ChangePassword, ResetPassword, UserLogin} from "./auth.validation";
 import {JwtAuthGuard} from "./jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
 import { TokenValidResponse} from "./auth.response";
@@ -15,6 +15,12 @@ import {PsychologistDTOID} from "../psychologist/psychologist.dto";
 import { PsyValidationService } from '../psy_validation/psy_validation.service';
 import { PsyValidationDto } from '../psy_validation/psy_validation.dto';
 import {EmailService} from "../email/email.service";
+import {TokenUserEntity} from "../token_user/token_user.entity";
+import {Repository} from "typeorm";
+import {FriendRequestEntity} from "../friendRequest/friendRequest.entity";
+import {TokenUserService} from "../token_user/token_user.service";
+import {TokenUserDTO} from "../token_user/token_user.dto";
+import {UserEntity} from "../user/user.entity";
 @Controller('auth')
 export class AuthController {
     constructor(private userService: UserService,
@@ -22,7 +28,8 @@ export class AuthController {
                 private userProfileService: UserProfileService,
                 private psychologistService: PsychologistService,
                 private psyValidationService: PsyValidationService,
-                private emailService:EmailService
+                private emailService:EmailService,
+                private tokenUserService:TokenUserService
     ) {
         this._admincreation();
     }
@@ -128,18 +135,40 @@ export class AuthController {
     return await this.psychologistService.delete(user.userId)
   }
 
-    @UseGuards(JwtAuthGuard)
-    @Get('resetPassword')
-    async resetPassword(@User() user,@Param('idPsyValidation') idPsyValidation) {
+    @Post('resetPassword')
+    async resetPassword(@Body() username:ResetPassword) {
         let email;
-        let userProfile = await this.userProfileService.findByUserId(user.userId);
+        let user:UserEntity =  await this.userService.findByUserName(username.username);
+        if(!user){
+            return true;
+        }
+        let userProfile = await this.userProfileService.findByUserId(user.id);
         if(userProfile){
             email = userProfile.email;
         }else{
-            let psy = await this.psychologistService.findByUserId(user.userId);
+            let psy = await this.psychologistService.findByUserId(user.id);
             email = psy.email;
         }
-        return await this.emailService.sendEmail(email);
+        let token:TokenUserEntity = await this.tokenUserService.create(user.id);
+        return await this.emailService.sendEmail(email,token.token);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('checkTokenReset')
+    async checkResetUserToken(@User() user,@Body('token') token ){
+        let isTokenValid = await this.tokenUserService.isTokenValid(token);
+        if(!isTokenValid){
+            throw new HttpException('Token not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Post('changePassword')
+    async changePassword(@Body() changePassword:ChangePassword){
+        let isTokenValid = await this.tokenUserService.isTokenValid(changePassword.token);
+        if(!isTokenValid){
+            throw new HttpException('Token not found', HttpStatus.NOT_FOUND);
+        }
+        return await this.userService.changePassword(isTokenValid.user.id,changePassword.newPassword)
     }
 
 }

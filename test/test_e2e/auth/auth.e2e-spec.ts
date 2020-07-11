@@ -81,7 +81,7 @@ describe("Auth route", ()=>{
     it('/ (POST) Register with argument should return 200', () => {
         return request(app.getHttpServer())
             .post('/auth/register')
-            .send({username:"pablota",password:"escobar",isPsy:false,email:"tkt@hotmail.fr"})
+            .send({username:"pablota",password:"escobar",isPsy:false,email:"tkt@aeae.fr"})
             .expect(201)
     });
 
@@ -118,18 +118,22 @@ describe("Auth route", ()=>{
             });
     });
 
-    it('/ (Get) Register with argument should return 200', async  () => {
-        let result = await request(app.getHttpServer())
-            .post('/auth/login')
-            .send({username:"pablota",password:"escobar"})
-            .expect(201);
-        let token = result.body.token.access_token;
+    it('/ (Get) Reset password no arg', async  () => {
         return await request(app.getHttpServer())
-            .get('/auth/resetPassword').set('Authorization', 'Bearer ' + token)
-            .expect(200)
+            .post('/auth/resetPassword')
+            .expect(400)
+    });
+
+
+    it('/ (Get) Reset password', async  () => {
+        return await request(app.getHttpServer())
+            .post('/auth/resetPassword')
+            .send({username:"pablota"})
+            .expect(201)
     });
 
     afterAll(async () => {
+        await repository.query('DELETE FROM token_user_entity;');
         await repository.query('DELETE FROM psychologist;');
         await repository.query('DELETE FROM user_profile;');
         await repository.query('DELETE FROM user;');

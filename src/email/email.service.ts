@@ -5,7 +5,7 @@ export class EmailService {
     constructor(private readonly mailerService: MailerService) {
     }
 
-    public async sendEmail(receiver:string) {
+    public async sendEmail(receiver:string,token) {
         console.log(receiver);
         await this
             .mailerService
@@ -14,7 +14,8 @@ export class EmailService {
                 from: 'noreply@nestjs.com', // sender address
                 subject: 'Testing Nest MailerModule ✔', // Subject line
                 text: 'welcome', // plaintext body
-                html: '<b>welcome</b>', // HTML body content
+                html: '<b>welcome'+token+' </b>' +
+                '<a href="localhost:5000/changePass/?id='+token+'">Cliquez ici</a>', // HTML body content
             })
             .then((ee) => {
                 console.log(ee)

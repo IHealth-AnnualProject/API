@@ -50,12 +50,11 @@ export class ReportController {
     async delete(@Param('idReport') reportId,@User() user,) {
         return await this.reportService.delete(reportId);
     }
-
-      @UseGuards(JwtAuthGuard)
-      @Get(':idReport')
-      async getValidById(@User() user,@Param('idReport') idReport) {
+    @UseGuards(JwtAuthGuard)
+    @Get(':idReport')
+    async getValidById(@User() user,@Param('idReport') idReport) {
         return await this.reportService.getReportByID(idReport);
-      }
+    }
 
 
 }
