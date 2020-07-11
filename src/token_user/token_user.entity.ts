@@ -14,6 +14,6 @@ export class TokenUserEntity {
     @JoinColumn()
     user: UserEntity;
 
-    @Column()
+    @Column('bigint')
     date:number;
 }
