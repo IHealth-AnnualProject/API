@@ -80,8 +80,7 @@ export class UserService {
         let me = await this.userRepository.findOne({where:{id:userId}});
         password = await bcrypt.hash(password, 10);
         me.password=password;
-        await this.userRepository.update(userId, me);
-
+        return await this.userRepository.update(userId, me);
     }
 
     async delete(userID:string) {

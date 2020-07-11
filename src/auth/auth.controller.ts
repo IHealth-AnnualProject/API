@@ -167,6 +167,7 @@ export class AuthController {
         if(!isTokenValid){
             throw new HttpException('Token not found', HttpStatus.NOT_FOUND);
         }
+        await this.tokenUserService.delete(changePassword.token);
         return await this.userService.changePassword(isTokenValid.user.id,changePassword.newPassword)
     }
 
