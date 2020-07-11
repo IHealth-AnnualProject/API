@@ -54,7 +54,7 @@ export class EmailService {
                 '    <hr>\n' +
                 '    <p>Vous avez fait une requête pour changer de mot de passe.</p>\n' +
                 '    <p>Cliquez sur ce lien pour changer votre mot de passe .</p>\n' +
-                '    <center><p><a href="'+process.env.APP_URL+process.env.APP_WEB_PORT+'/changePass/?id='+token+'"><button class="button"type="button">Mettre à jour le mot de passe</button></a></p>\n' +
+                '    <center><p><a href="'+process.env.APP_URL+':'+process.env.APP_WEB_PORT+'/changePass/?id='+token+'"><button class="button"type="button">Mettre à jour le mot de passe</button></a></p>\n' +
                 '    <img src="https://i.ibb.co/S3H2qT2/betsbi.png" alt="BetsBi" style="width:200px"></center>\n' +
                 '  </div>\n' +
                 '</body>\n'
