@@ -21,6 +21,9 @@ import {FriendRequestEntity} from "../friendRequest/friendRequest.entity";
 import {TokenUserService} from "../token_user/token_user.service";
 import {TokenUserDTO} from "../token_user/token_user.dto";
 import {UserEntity} from "../user/user.entity";
+import 'dotenv/config';
+
+
 @Controller('auth')
 export class AuthController {
     constructor(private userService: UserService,
@@ -119,7 +122,7 @@ export class AuthController {
     let admin = await this.userService.findOneById("admin");
 
     if(!admin){
-      let user:UserCreation= {id:"admin",username:"admin",password:"admin",isPsy:false,email:"admin@admin.fr"};
+      let user:UserCreation= {id:"admin",username:process.env.ADMIN_USERNAME,password:process.env.ADMIN_PASSWORD,isPsy:false,email:"admin@admin.fr"};
       await this.userService.register(user,false);
     }
   }

@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import 'dotenv/config';
+
 @Injectable()
 export class EmailService {
     constructor(private readonly mailerService: MailerService) {
@@ -12,7 +14,7 @@ export class EmailService {
             .sendMail({
                 to: receiver, // list of receivers
                 from: 'noreply@nestjs.com', // sender address
-                subject: 'Testing Nest MailerModule ✔', // Subject line
+                subject: 'Betsbi - Changement de mot de passe', // Subject line
                 text: 'welcome', // plaintext body
                 html: '<!DOCTYPE html>\n' +
                 '<html>\n' +
@@ -52,12 +54,10 @@ export class EmailService {
                 '    <hr>\n' +
                 '    <p>Vous avez fait une requête pour changer de mot de passe.</p>\n' +
                 '    <p>Cliquez sur ce lien pour changer votre mot de passe .</p>\n' +
-                '    <center><p><a href="localhost:5000/changePass/?id='+token+'"><button class="button"type="button">Mettre à jour le mot de passe</button></a></p>\n' +
+                '    <center><p><a href="'+process.env.APP_URL+process.env.APP_WEB_PORT+'/changePass/?id='+token+'"><button class="button"type="button">Mettre à jour le mot de passe</button></a></p>\n' +
                 '    <img src="https://i.ibb.co/S3H2qT2/betsbi.png" alt="BetsBi" style="width:200px"></center>\n' +
                 '  </div>\n' +
-                '</body>\n' +
-                '</html><b>welcome'+token+' </b>'
-                //'<a href="localhost:5000/changePass/?id='+token+'">Cliquez ici</a>', // HTML body content
+                '</body>\n'
             })
             .then((ee) => {
                 console.log(ee)
