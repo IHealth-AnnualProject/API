@@ -2,9 +2,9 @@ import {Body, Controller, Post, Get, HttpException, HttpStatus, UseGuards, Param
 
 import { AuthService } from './auth.service';
 import {UserService} from "../user/user.service";
-import {UserAndTokenResponse, UserCreation, UserDTO} from "../user/user.dto";
+import {UserAndTokenResponse, UserCreation} from "../user/user.dto";
 import {ApiCreatedResponse} from "@nestjs/swagger";
-import {UserProfileDTO, UserProfileDTOID} from "../userProfile/userProfile.dto";
+import {UserProfileDTOID} from "../userProfile/userProfile.dto";
 import {ChangePassword, CheckToken, ResetPassword, UserLogin} from "./auth.validation";
 import {JwtAuthGuard} from "./jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
@@ -16,10 +16,7 @@ import { PsyValidationService } from '../psy_validation/psy_validation.service';
 import { PsyValidationDto } from '../psy_validation/psy_validation.dto';
 import {EmailService} from "../email/email.service";
 import {TokenUserEntity} from "../token_user/token_user.entity";
-import {Repository} from "typeorm";
-import {FriendRequestEntity} from "../friendRequest/friendRequest.entity";
 import {TokenUserService} from "../token_user/token_user.service";
-import {TokenUserDTO} from "../token_user/token_user.dto";
 import {UserEntity} from "../user/user.entity";
 import 'dotenv/config';
 
