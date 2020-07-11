@@ -27,3 +27,9 @@ export class ResetPassword{
     @IsNotEmpty()
     username: string;
 }
+
+export class CheckToken{
+    @ApiProperty()
+    @IsNotEmpty()
+    token: string;
+}
