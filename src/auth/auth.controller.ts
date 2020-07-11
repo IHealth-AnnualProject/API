@@ -153,9 +153,8 @@ export class AuthController {
         return await this.emailService.sendEmail(email,token.token);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Post('checkTokenReset')
-    async checkResetUserToken(@User() user,@Body() token:CheckToken ){
+    async checkResetUserToken(@Body() token:CheckToken ){
         let isTokenValid = await this.tokenUserService.isTokenValid(token.token);
         if(!isTokenValid){
             throw new HttpException('Token not found', HttpStatus.NOT_FOUND);
