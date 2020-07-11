@@ -39,5 +39,10 @@ export class TokenUserService {
         return token;
     }
 
+    async delete(userToken:string){
+        let token:TokenUserEntity = await this.tokenUserService.findOne({where:{token:userToken} ,relations:["user"]});
+        return await this.tokenUserService.delete(token.id);
+    }
+
 
 }

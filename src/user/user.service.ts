@@ -8,6 +8,7 @@ import {UserLogin} from "../auth/auth.validation";
 import {UserProfileService} from "../userProfile/userProfile.service";
 import {UserProfileDTO} from "../userProfile/userProfile.dto";
 import {FriendsService} from "../friends/friends.service";
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -77,6 +78,7 @@ export class UserService {
 
     async changePassword(userId:string,password:string){
         let me = await this.userRepository.findOne({where:{id:userId}});
+        password = await bcrypt.hash(password, 10);
         me.password=password;
         await this.userRepository.update(userId, me);
 
