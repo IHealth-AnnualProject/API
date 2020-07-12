@@ -150,13 +150,7 @@ describe("UserProfile route", ()=>{
             .expect(201)
     });
 
-
-    it('/ (Delete) Delete user works ', async () => {
-        return request(app.getHttpServer())
-            .delete('/auth/')
-            .set('Authorization', 'Bearer ' + token)
-            .expect(200)
-    });
+    
     /*it('/ (Get) Should not create a user with a psy', async () => {
         await request(app.getHttpServer()).post('/auth/register').send({username:"user",password:"escobar",isPsy:true}).timeout(10000);
         let login = await request(app.getHttpServer()).post('/auth/login').send({username:"user",password:"escobar"}).timeout(10000);
