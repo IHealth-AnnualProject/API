@@ -16,10 +16,6 @@ export class ReportService {
     ) {}
 
     async create(reportCreation:ReportCreation,userid:string){
-        let report = await this.reportEntityRepository.findOne({where:{from:userid,to:reportCreation.reportedUser}});
-        if(report) {
-            throw new HttpException('A report with this name already exist', HttpStatus.CONFLICT);
-        }
         let user = await this.userService.findOneById(reportCreation.reportedUser);
         if(!user){
           throw new HttpException('THe user you trying to report doesnt exist', HttpStatus.BAD_REQUEST);
