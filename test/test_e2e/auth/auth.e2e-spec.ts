@@ -30,7 +30,6 @@ describe("Auth route", ()=>{
     }).compile();
     app = module.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
-
     await app.init();
     repository = module.get('UserEntityRepository');
     });
@@ -112,7 +111,8 @@ describe("Auth route", ()=>{
                 user: {
                     userId: userId,
                     username: 'pablota',
-                    isPsy: false
+                    isPsy: false,
+                    isAdmin: false
                 },
                 statusCode: 200
             });
@@ -129,6 +129,15 @@ describe("Auth route", ()=>{
         return await request(app.getHttpServer())
             .post('/auth/resetPassword')
             .send({username:"pablota"})
+            .expect(201)
+    });
+
+    it('/ (POST) Create admin should return 200', async () => {
+        let result = await request(app.getHttpServer()).post('/auth/login').send({username:"admin",password:"admin"});
+        let token = result.body.token.access_token;
+        return await request(app.getHttpServer())
+            .post('/auth/createAdmin').set('Authorization', 'Bearer ' + token)
+            .send({username:"Admin2",password:"admin2",isPsy:false,email:"hello@hello.fr"})
             .expect(201)
     });
 

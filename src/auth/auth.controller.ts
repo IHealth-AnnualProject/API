@@ -2,7 +2,7 @@ import {Body, Controller, Post, Get, HttpException, HttpStatus, UseGuards, Param
 
 import { AuthService } from './auth.service';
 import {UserService} from "../user/user.service";
-import {UserAndTokenResponse, UserCreation} from "../user/user.dto";
+import {AdminCreation, UserAndTokenResponse, UserCreation} from "../user/user.dto";
 import {ApiCreatedResponse} from "@nestjs/swagger";
 import {UserProfileDTOID} from "../userProfile/userProfile.dto";
 import {ChangePassword, CheckToken, ResetPassword, UserLogin} from "./auth.validation";
@@ -19,6 +19,7 @@ import {TokenUserEntity} from "../token_user/token_user.entity";
 import {TokenUserService} from "../token_user/token_user.service";
 import {UserEntity} from "../user/user.entity";
 import 'dotenv/config';
+import {AdminGuard} from "./admin.guard";
 
 
 @Controller('auth')
@@ -71,31 +72,32 @@ export class AuthController {
 
         let psyValidationDTO:PsyValidationDto= {username:user.username,email:userDTO.email,password:userDTO.password};
         return await this.psyValidationService.create(psyValidationDTO);
-
     }
 
     @ApiCreatedResponse({
         description: 'Users login.',
         type: TokenValidResponse,
     })
+
     @UseGuards(JwtAuthGuard)
     @Get('is-token-valid')
     async isTokenValid(@User() user) {
         return {user: user, statusCode: 200}
     }
+    @UseGuards(AdminGuard)
+    @UseGuards(JwtAuthGuard)
+    @Get('valid')
+    async valid(@User() user) {
+        return await this.psyValidationService.findAll();
+    }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('valid')
-  async valid(@User() user) {
-    return await this.psyValidationService.findAll();
-  }
-
+  @UseGuards(AdminGuard)
   @UseGuards(JwtAuthGuard)
   @Get('valid/:idPsyValidation')
   async getValidById(@User() user,@Param('idPsyValidation') idPsyValidation) {
     return await this.psyValidationService.findById(idPsyValidation);
   }
-
+  @UseGuards(AdminGuard)
   @UseGuards(JwtAuthGuard)
   @Post('validatePsy/:idPsyValidation')
   async validateUser(@User() user,@Param('idPsyValidation') idPsyValidation) {
@@ -119,8 +121,8 @@ export class AuthController {
     let admin = await this.userService.findOneById("admin");
 
     if(!admin){
-      let user:UserCreation= {id:"admin",username:process.env.ADMIN_USERNAME,password:process.env.ADMIN_PASSWORD,isPsy:false,email:"admin@admin.fr"};
-      await this.userService.register(user,false);
+      let user = {id:"admin",username:process.env.ADMIN_USERNAME,password:process.env.ADMIN_PASSWORD,isPsy:false,email:"admin@admin.fr",isAdmin:true};
+      await this.userService.registerAdmin(user,false);
     }
   }
 
@@ -171,4 +173,11 @@ export class AuthController {
         return await this.userService.changePassword(isTokenValid.user.id,changePassword.newPassword)
     }
 
+    @Post('createAdmin')
+    @UseGuards(AdminGuard)
+    @UseGuards(JwtAuthGuard)
+    async adminCreation(@Body() userCreation:UserCreation ){
+        let userAdmin:AdminCreation={username:"",isPsy:false,isAdmin:true,password:"",email:userCreation.email};
+        return await this.userService.registerAdmin(userAdmin)
+    }
 }

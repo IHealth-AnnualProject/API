@@ -5,6 +5,7 @@ import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
 import {ReportRO} from "./report.dto";
 import {ReportCreation} from "./report.validation";
+import {AdminGuard} from "../auth/admin.guard";
 
 
 @Controller('report')
@@ -13,6 +14,7 @@ export class ReportController {
     constructor(private readonly reportService: ReportService) {}
 
     @Get('getLast')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({
     })
@@ -21,6 +23,7 @@ export class ReportController {
     }
 
     @Get('')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({type:[ReportRO]})
     async read() {
@@ -28,6 +31,7 @@ export class ReportController {
     }
 
     @Get(':userId/reported')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async findById(@Param('userId') userId) {
@@ -44,12 +48,14 @@ export class ReportController {
     }
 
     @Delete(':idReport')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({
     })
     async delete(@Param('idReport') reportId,@User() user,) {
         return await this.reportService.delete(reportId);
     }
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @Get(':idReport')
     async getValidById(@User() user,@Param('idReport') idReport) {

@@ -9,6 +9,7 @@ import {ApiTags, ApiCreatedResponse, ApiBody} from "@nestjs/swagger";
 import {UserProfileService} from "./userProfile.service";
 import {MoralStatsDTO, MoralStatsRO} from "../moral_stats/moralStats.dto";
 import {MoralStatCreation} from "./userProfile.validation";
+import {AdminGuard} from "../auth/admin.guard";
 
 
 @ApiTags('userProfile')
@@ -29,7 +30,6 @@ export class UserProfileController {
         }
         throw new HttpException('You cant create userProfile as a psy', HttpStatus.UNAUTHORIZED);
     }*/
-
     @UseGuards(JwtAuthGuard)
     @Get('')
     @ApiCreatedResponse({

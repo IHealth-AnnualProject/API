@@ -16,6 +16,7 @@ let token_user1;
 let idUser1;
 let token_user2;
 let idUser2;
+let adminToken;
 describe("Report route", ()=>{
     beforeAll(async()=> {
         const module = await
@@ -50,6 +51,9 @@ describe("Report route", ()=>{
         let user2_result = await request(app.getHttpServer()).post('/auth/login').send({username:"jeanne",password:"escobar"});
         token_user2 = user2_result.body.token.access_token;
         idUser2 = user2_result.body.user.id;
+
+        let result = await request(app.getHttpServer()).post('/auth/login').send({username:"admin",password:"admin"});
+        adminToken = result.body.token.access_token;
     });
 
 
@@ -77,13 +81,13 @@ describe("Report route", ()=>{
 
   it('/ (GET) GET report return 201 ', () => {
     return  request(app.getHttpServer())
-      .get('/report').set('Authorization', 'Bearer ' + token_user1)
+      .get('/report').set('Authorization', 'Bearer ' + adminToken)
       .expect(200);
   });
 
     it('/ (Get) get reports', async () => {
         let result =  await  request(app.getHttpServer())
-            .get('/report/'+idUser2+'/reported').set('Authorization', 'Bearer ' + token_user1);
+            .get('/report/'+idUser2+'/reported').set('Authorization', 'Bearer ' + adminToken);
         expect(result.body.length).toBe(1);
         expect(result.body[0].from.id).toBe(idUser1);
         expect(result.body[0].to.id).toBe(idUser2);
@@ -92,7 +96,7 @@ describe("Report route", ()=>{
 
     it('/ (Get) get reports for user', async () => {
         let result =  await  request(app.getHttpServer())
-            .get('/report/'+idUser1+'/reported').set('Authorization', 'Bearer ' + token_user1);
+            .get('/report/'+idUser1+'/reported').set('Authorization', 'Bearer ' + adminToken);
         expect(result.body.length).toBe(0);
     });
 

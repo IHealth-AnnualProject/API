@@ -5,6 +5,7 @@ import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {User} from "../decorator/user.decorator";
 import {ErrorRO} from "./error.dto";
 import {ErrorCreation} from "./error.validation";
+import {AdminGuard} from "../auth/admin.guard";
 
 
 @Controller('error')
@@ -13,6 +14,7 @@ export class ErrorController {
     constructor(private readonly errorService: ErrorService) {}
 
     @Get('getLast')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     async getLast() {
         console.log("ououuu");
@@ -20,6 +22,7 @@ export class ErrorController {
     }
 
     @Get('')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({type:[ErrorRO]})
     async read() {
@@ -27,6 +30,7 @@ export class ErrorController {
     }
 
     @Get(':errorId')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async findById(@Param('errorId') errorId,@User() user) {
@@ -34,6 +38,7 @@ export class ErrorController {
     }
 
     @Post(':errorId/validate')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async validById(@Param('errorId') errorId,@User() user) {
@@ -41,6 +46,7 @@ export class ErrorController {
     }
 
     @Post(':errorId/pending')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthGuard)
     @ApiCreatedResponse({})
     async pendingById(@Param('errorId') errorId,@User() user) {

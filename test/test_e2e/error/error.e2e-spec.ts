@@ -38,9 +38,9 @@ describe("Error route", ()=>{
         app.useGlobalPipes(new ValidationPipe());
 
         await app.init();
+        await new Promise(r => setTimeout(r, 1000));
         repository = module.get('UserProfileEntityRepository');
-        await request(app.getHttpServer()).post('/auth/register').send({username:"pabla",password:"escobar",isPsy:false ,email:"hello@hello.fr" });
-        let result = await request(app.getHttpServer()).post('/auth/login').send({username:"pabla",password:"escobar"});
+        let result = await request(app.getHttpServer()).post('/auth/login').send({username:"admin",password:"admin"});
         token = result.body.token.access_token;
         userId = result.body.user.id;
     });

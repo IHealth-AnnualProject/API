@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { UserEntity } from './user.entity';
-import {UserCreation, UserDTO, UserModif} from './user.dto';
+import {AdminCreation, UserCreation, UserDTO, UserModif} from './user.dto';
 import {UserLogin} from "../auth/auth.validation";
 import {UserProfileService} from "../userProfile/userProfile.service";
 import {UserProfileDTO} from "../userProfile/userProfile.dto";
@@ -41,6 +41,20 @@ export class UserService {
         user = await this.userRepository.create(data);
         if(!psyRegister) {
           await this.userRepository.save(user);
+        }
+        return user ;
+    }
+
+    async registerAdmin(data: AdminCreation,psyRegister=false) {
+        // TODOOO CREER LE PROFILE ICI
+        const { username } = data;
+        let user = await this.userRepository.findOne({where: { username }});
+        if (user) {
+            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+        }
+        user = await this.userRepository.create(data);
+        if(!psyRegister) {
+            await this.userRepository.save(user);
         }
         return user ;
     }

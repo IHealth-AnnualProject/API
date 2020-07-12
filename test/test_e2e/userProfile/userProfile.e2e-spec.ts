@@ -65,7 +65,7 @@ describe("UserProfile route", ()=>{
             .get('/userProfile').set('Authorization', 'Bearer ' + token)
             .expect(200);
         id = result.body[0].id;
-        creationDate = result.body[0].user.created
+        creationDate = result.body[0].user.created;
         email = result.body[0].email;
     });
 
@@ -81,14 +81,15 @@ describe("UserProfile route", ()=>{
                     created: creationDate,
                     username: 'pabla',
                     isPsy: false, xp:0,
-                    skin: ''
+                    skin: '',
+                    isAdmin: false
                 },
                 birthdate: '0000-00-00',
             });
     });
 
     it('/ (Get) Get userProfile/id return 200',  () => {
-     return   request(app.getHttpServer())
+     return request(app.getHttpServer())
             .get('/userProfile/'+id).set('Authorization', 'Bearer ' + token)
             .expect(200).expect({
                 id: id,
@@ -100,7 +101,8 @@ describe("UserProfile route", ()=>{
                      username: 'pabla',
                      isPsy: false,
                      xp:0,
-                    skin: ''
+                    skin: '',
+                    isAdmin: false
                 },
              birthdate: '0000-00-00',
             });
