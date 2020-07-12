@@ -77,5 +77,12 @@ export class ReportController {
         return await this.reportService.forgiveUser(idReport);
     }
 
+    @UseGuards(AdminGuard)
+    @UseGuards(JwtAuthGuard)
+    @Post(':idReport/seen')
+    async seen(@User() user,@Param('idReport') idReport) {
+        return await this.reportService.seen(idReport);
+    }
+
 
 }
