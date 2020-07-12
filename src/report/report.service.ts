@@ -54,10 +54,13 @@ export class ReportService {
 
     async getLast(){
         let report = await this.reportEntityRepository.find({order:{created:"DESC"}});
-        if(!report){
+        if(report){
             throw new HttpException('Error not found', HttpStatus.NOT_FOUND);
         }
-        return report[0].toResponseObject();
+        if(report[0]){
+            return report[0].toResponseObject();
+        }
+        return report[0];
     }
 
     async getReportByID(reportId:string){
