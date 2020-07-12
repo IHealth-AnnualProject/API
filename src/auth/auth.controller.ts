@@ -51,6 +51,9 @@ export class AuthController {
     async login(@Body() userLogin: UserLogin) {
         const user = await this.userService.login(userLogin);
         const token = await this.authService.login(user);
+        if(user.isBan){
+            throw new HttpException('You have been banned', HttpStatus.NOT_ACCEPTABLE);
+        }
         return {user, token};
     }
 
@@ -97,6 +100,7 @@ export class AuthController {
   async getValidById(@User() user,@Param('idPsyValidation') idPsyValidation) {
     return await this.psyValidationService.findById(idPsyValidation);
   }
+
   @UseGuards(AdminGuard)
   @UseGuards(JwtAuthGuard)
   @Post('validatePsy/:idPsyValidation')
@@ -129,12 +133,14 @@ export class AuthController {
   @Delete()
   @UseGuards(JwtAuthGuard)
   async delete(@User() user){
-    await this.userService.delete(user.userId);
-    let userProfile = await this.userProfileService.findByUserId(user.userId);
-    if(userProfile){
-        return await this.userProfileService.delete(user.userId);
-    }
-    return await this.psychologistService.delete(user.userId)
+
+        let userProfile = await this.userProfileService.findByUserId(user.userId);
+        if(userProfile){
+             await this.userProfileService.delete(user.userId);
+        }else{
+            await this.psychologistService.delete(user.userId);
+        }
+        return await this.userService.delete(user.userId);
   }
 
     @Post('resetPassword')
@@ -180,4 +186,5 @@ export class AuthController {
         let userAdmin:AdminCreation={username:"",isPsy:false,isAdmin:true,password:"",email:userCreation.email};
         return await this.userService.registerAdmin(userAdmin)
     }
+
 }

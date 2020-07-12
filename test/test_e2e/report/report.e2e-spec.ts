@@ -17,6 +17,7 @@ let idUser1;
 let token_user2;
 let idUser2;
 let adminToken;
+let reportId;
 describe("Report route", ()=>{
     beforeAll(async()=> {
         const module = await
@@ -88,6 +89,7 @@ describe("Report route", ()=>{
     it('/ (Get) get reports', async () => {
         let result =  await  request(app.getHttpServer())
             .get('/report/'+idUser2+'/reported').set('Authorization', 'Bearer ' + adminToken);
+        reportId = result.body[0].id;
         expect(result.body.length).toBe(1);
         expect(result.body[0].from.id).toBe(idUser1);
         expect(result.body[0].to.id).toBe(idUser2);
@@ -99,6 +101,22 @@ describe("Report route", ()=>{
             .get('/report/'+idUser1+'/reported').set('Authorization', 'Bearer ' + adminToken);
         expect(result.body.length).toBe(0);
     });
+
+    it('/ (Get) Ban user', async () => {
+        await  request(app.getHttpServer())
+            .post('/report/'+reportId+'/ban').set('Authorization', 'Bearer ' + adminToken).expect(201);
+        return await request(app.getHttpServer()).post('/auth/login').send({username:"jeanne",password:"escobar"}).expect(406);
+    });
+
+    it('/ (Get) Forgive user', async () => {
+         await  request(app.getHttpServer())
+            .post('/report/'+reportId+'/forgive').set('Authorization', 'Bearer ' + adminToken).expect(201);
+        return await request(app.getHttpServer()).post('/auth/login').send({username:"jeanne",password:"escobar"}).expect(201);
+    });
+
+
+
+
 
     afterAll(async () => {
         await repository.query('DELETE FROM report;');

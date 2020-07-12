@@ -101,6 +101,18 @@ export class UserService {
         await this.userRepository.delete(userID);
     }
 
+    async ban(userId:string){
+        let me = await this.userRepository.findOne({where:{id:userId}});
+        me.isBan=true;
+        await this.userRepository.update(userId, me);
+    }
+
+    async forgive(userId:string){
+        let me = await this.userRepository.findOne({where:{id:userId}});
+        me.isBan=false;
+        await this.userRepository.update(userId, me);
+    }
+
     async findByUserName(username:string) :Promise<UserEntity | undefined>{
         return await this.userRepository.findOne({where:{username:username}});
     }

@@ -26,6 +26,12 @@ export class ReportEntity {
     @JoinColumn()
     to:UserEntity;
 
+
+    @Column('boolean',{
+        default: false
+    })
+    isResolve: boolean;
+
     toResponseObject(): ReportRO {
         return {created:this.created,description:this.description,id:this.id,name:this.name,from:this.from.toResponseObject(),to:this.to.toResponseObject()};
     }

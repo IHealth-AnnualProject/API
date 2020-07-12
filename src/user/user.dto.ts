@@ -75,8 +75,9 @@ export class UserRO {
     @ApiProperty()
     skin:string;
     @ApiPropertyOptional()
-    @IsEmail()
     isAdmin:boolean;
+    @ApiPropertyOptional()
+    isBan:boolean;
 }
 
 export class Token {

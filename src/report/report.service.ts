@@ -68,4 +68,24 @@ export class ReportService {
     }
 
 
+    async banUser(reportId:string){
+        let report = await this.reportEntityRepository.findOne({where:{id:reportId},relations:["to","from"]});
+        if(!report){
+            throw new HttpException('Report not found', HttpStatus.NOT_FOUND);
+        }
+        await this.userService.ban(report.to.id);
+        report.isResolve=true;
+        return await this.reportEntityRepository.update(reportId,report);
+    }
+
+    async forgiveUser(reportId:string){
+        let report = await this.reportEntityRepository.findOne({where:{id:reportId},relations:["to","from"]});
+        if(!report){
+            throw new HttpException('Report not found', HttpStatus.NOT_FOUND);
+        }
+        report.isResolve=true;
+        await this.userService.forgive(report.to.id);
+        return await this.reportEntityRepository.update(reportId,report);
+    }
+
 }

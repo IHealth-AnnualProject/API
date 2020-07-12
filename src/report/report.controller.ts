@@ -6,6 +6,7 @@ import {User} from "../decorator/user.decorator";
 import {ReportRO} from "./report.dto";
 import {ReportCreation} from "./report.validation";
 import {AdminGuard} from "../auth/admin.guard";
+import {UserService} from "../user/user.service";
 
 
 @Controller('report')
@@ -60,6 +61,20 @@ export class ReportController {
     @Get(':idReport')
     async getValidById(@User() user,@Param('idReport') idReport) {
         return await this.reportService.getReportByID(idReport);
+    }
+
+    @UseGuards(AdminGuard)
+    @UseGuards(JwtAuthGuard)
+    @Post(':idReport/ban')
+    async ban(@User() user,@Param('idReport') idReport) {
+        return await this.reportService.banUser(idReport);
+    }
+
+    @UseGuards(AdminGuard)
+    @UseGuards(JwtAuthGuard)
+    @Post(':idReport/forgive')
+    async forgive(@User() user,@Param('idReport') idReport) {
+        return await this.reportService.forgiveUser(idReport);
     }
 
 

@@ -31,6 +31,11 @@ export class UserEntity {
     @Column('boolean',{
         default: false
     })
+    isBan: boolean;
+
+    @Column('boolean',{
+        default: false
+    })
     isAdmin:boolean;
 
     @Column('int',{
@@ -53,7 +58,7 @@ export class UserEntity {
     }
 
     toResponseObject(): UserRO {
-        return {id:this.id,created:this.created,username:this.username,isPsy:this.isPsy,xp:this.xp,skin:this.skin,isAdmin:this.isAdmin};
+        return {id:this.id,created:this.created,username:this.username,isPsy:this.isPsy,xp:this.xp,skin:this.skin,isAdmin:this.isAdmin,isBan:this.isBan};
     }
 
     }
