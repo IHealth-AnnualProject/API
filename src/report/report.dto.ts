@@ -14,6 +14,8 @@ export class ReportRO {
     to:UserRO;
     @ApiPropertyOptional()
     created:Date;
+    @ApiPropertyOptional()
+    isResolved:boolean;
 }
 
 export class ReportDTO {
