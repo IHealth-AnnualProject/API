@@ -43,6 +43,11 @@ export class ReportService {
         if(!report){
             throw new HttpException('No report found on this user', HttpStatus.NOT_FOUND);
         }
+
+        report.forEach(function(part, index) {
+            this[index] = part.toResponseObject();
+        }, report);
+
         return report;
     }
 
@@ -52,7 +57,7 @@ export class ReportService {
         if(!report){
             throw new HttpException('Error not found', HttpStatus.NOT_FOUND);
         }
-        return report[0];
+        return report[0].toResponseObject();
     }
 
     async getReportByID(reportId:string){
@@ -60,7 +65,7 @@ export class ReportService {
       if(!report){
         throw new HttpException('Error not found', HttpStatus.NOT_FOUND);
       }
-      return report;
+      return report.toResponseObject();
     }
 
 
