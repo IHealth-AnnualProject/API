@@ -38,7 +38,7 @@
     "class-validator": "^0.11.1",
     "dialogflow": "^1.2.0",
     "dotenv": "^8.2.0",
-    "file-type": "^14.6.0",
+    "file-type": "^16.5.4",
     "get-audio-duration": "^2.0.2-beta.0",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
